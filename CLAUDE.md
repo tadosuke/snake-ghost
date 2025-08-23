@@ -6,6 +6,8 @@
 
 ## Development Environment
 
+- Windows
+- PowerShell for Terminal
 - Vite
 - TypeScript
 - Vitest
