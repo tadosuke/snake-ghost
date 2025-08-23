@@ -1,0 +1,16 @@
+{
+  "name": "snake-game",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "vite": "7.1.2",
+    "vitest": "3.2.4"
+  }
+}
