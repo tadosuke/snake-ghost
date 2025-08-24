@@ -12,7 +12,7 @@
 
 - [x] Snake body contains correct number of segments
 - [x] First segment is the head at starting position
-- [ ] Body segments are positioned correctly behind head
+- [x] Body segments are positioned correctly behind head
 
 ### Property Access
 

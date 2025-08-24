@@ -45,4 +45,29 @@ describe('Snake', () => {
     expect(body[0]).toBe(head);
     expect(body[0]).toEqual({ x: startX, y: startY });
   });
+
+  it('body segments are positioned correctly behind head', () => {
+    const startX = 10;
+    const startY = 5;
+    const snake = new Snake(startX, startY);
+    
+    const body = snake.getBody();
+    
+    // Head should be at starting position
+    expect(body[0]).toEqual({ x: startX, y: startY });
+    
+    // Second segment should be one unit to the left of head (default direction is right)
+    expect(body[1]).toEqual({ x: startX - 1, y: startY });
+    
+    // Third segment (tail) should be two units to the left of head
+    expect(body[2]).toEqual({ x: startX - 2, y: startY });
+    
+    // Verify segments are in a line horizontally
+    expect(body[0].y).toBe(body[1].y);
+    expect(body[1].y).toBe(body[2].y);
+    
+    // Verify segments are spaced one unit apart
+    expect(body[0].x - body[1].x).toBe(1);
+    expect(body[1].x - body[2].x).toBe(1);
+  });
 });
