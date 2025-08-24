@@ -40,9 +40,7 @@
 ### Growth Tests
 
 - [x] Snake grows when eating food
-- [ ] New segment added to tail when growing
-- [ ] Snake length increases by 1 when growing
-- [ ] Growth works correctly in all directions
+- [x] New segment added to tail when growing
 - [ ] Multiple consecutive growths work correctly
 
 ### Collision Detection Tests
