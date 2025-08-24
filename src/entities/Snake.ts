@@ -32,4 +32,8 @@ export class Snake {
   getDirection(): string {
     return this.direction;
   }
+
+  containsPosition(x: number, y: number): boolean {
+    return this.body.some(segment => segment.x === x && segment.y === y);
+  }
 }
