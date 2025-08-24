@@ -140,4 +140,34 @@ describe('Snake', () => {
     expect(segments3).toHaveLength(3);
     expect(segments3[0]).toEqual({ x: 0, y: 0 });
   });
+
+  it('can check if position is part of snake body', () => {
+    const startX = 10;
+    const startY = 5;
+    const snake = new Snake(startX, startY);
+
+    // Test head position
+    expect(snake.containsPosition(startX, startY)).toBe(true);
+
+    // Test body segment positions
+    expect(snake.containsPosition(startX - 1, startY)).toBe(true); // Body segment
+    expect(snake.containsPosition(startX - 2, startY)).toBe(true); // Tail segment
+
+    // Test positions not in snake body
+    expect(snake.containsPosition(startX + 1, startY)).toBe(false); // In front of head
+    expect(snake.containsPosition(startX, startY + 1)).toBe(false); // Above head
+    expect(snake.containsPosition(startX, startY - 1)).toBe(false); // Below head
+    expect(snake.containsPosition(startX - 3, startY)).toBe(false); // Behind tail
+
+    // Test completely different positions
+    expect(snake.containsPosition(0, 0)).toBe(false);
+    expect(snake.containsPosition(100, 100)).toBe(false);
+
+    // Test with different starting position to ensure consistency
+    const snake2 = new Snake(0, 0);
+    expect(snake2.containsPosition(0, 0)).toBe(true); // Head
+    expect(snake2.containsPosition(-1, 0)).toBe(true); // Body
+    expect(snake2.containsPosition(-2, 0)).toBe(true); // Tail
+    expect(snake2.containsPosition(1, 0)).toBe(false); // Not in body
+  });
 });
