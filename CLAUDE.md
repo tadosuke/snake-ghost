@@ -16,3 +16,8 @@
 
 - Fix package version
   - Never use `^`, `~`
+
+## Shortcut Commands
+
+- `--bg`: in the background
+- `--par`: in parallel
