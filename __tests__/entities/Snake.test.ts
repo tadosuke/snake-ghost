@@ -70,4 +70,19 @@ describe('Snake', () => {
     expect(body[0].x - body[1].x).toBe(1);
     expect(body[1].x - body[2].x).toBe(1);
   });
+
+  it('can get snake body length', () => {
+    const snake = new Snake(5, 5);
+    
+    // Snake should start with initial length of 3 segments
+    expect(snake.getBodyLength()).toBe(3);
+    
+    // Verify that body length matches actual body array length
+    const body = snake.getBody();
+    expect(snake.getBodyLength()).toBe(body.length);
+    
+    // Test with different starting position to ensure consistency
+    const snake2 = new Snake(10, 15);
+    expect(snake2.getBodyLength()).toBe(3);
+  });
 });
