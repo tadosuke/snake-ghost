@@ -19,7 +19,7 @@
 - [x] Can get snake body length
 - [x] Can get current direction
 - [x] Can get all body segments
-- [ ] Can check if position is part of snake body
+- [x] Can check if position is part of snake body
 
 ### Movement Tests
 
