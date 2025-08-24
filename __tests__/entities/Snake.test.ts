@@ -214,4 +214,51 @@ describe('Snake', () => {
     // Direction should remain the same
     expect(snake.getDirection()).toBe('right');
   });
+
+  it('snake moves left correctly', () => {
+    const startX = 10;
+    const startY = 7;
+    const snake = new Snake(startX, startY);
+
+    // Set direction to left
+    snake.setDirection('left');
+    expect(snake.getDirection()).toBe('left');
+
+    // Verify initial state
+    const initialBody = snake.getBody();
+    expect(initialBody).toHaveLength(3);
+    expect(initialBody[0]).toEqual({ x: startX, y: startY }); // Head
+    expect(initialBody[1]).toEqual({ x: startX - 1, y: startY }); // Body
+    expect(initialBody[2]).toEqual({ x: startX - 2, y: startY }); // Tail
+
+    // Move left
+    snake.move();
+
+    // Verify new state after moving left
+    const newBody = snake.getBody();
+    expect(newBody).toHaveLength(3); // Length should remain the same
+    
+    // Head should move one position to the left
+    expect(newBody[0]).toEqual({ x: startX - 1, y: startY });
+    
+    // Body segments should follow (previous head becomes new body segment)
+    expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
+    expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
+    
+    // Old tail should be removed (startX - 2, startY should no longer be in body)
+    expect(snake.containsPosition(startX - 2, startY)).toBe(false);
+    
+    // New head position should be in body
+    expect(snake.containsPosition(startX - 1, startY)).toBe(true);
+
+    // Test multiple moves in sequence
+    snake.move();
+    const bodyAfterSecondMove = snake.getBody();
+    expect(bodyAfterSecondMove[0]).toEqual({ x: startX - 2, y: startY }); // Head moves further left
+    expect(bodyAfterSecondMove[1]).toEqual({ x: startX - 1, y: startY }); // Previous head position
+    expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
+    
+    // Direction should remain left
+    expect(snake.getDirection()).toBe('left');
+  });
 });
