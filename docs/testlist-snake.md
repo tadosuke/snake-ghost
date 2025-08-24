@@ -35,7 +35,7 @@
 ### Direction Management
 
 - [x] Can set new direction
-- [ ] Can get current direction vector
+- [x] Can get current direction vector
 
 ### Growth Tests
 

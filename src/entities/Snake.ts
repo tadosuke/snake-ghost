@@ -33,6 +33,21 @@ export class Snake {
     return this.direction;
   }
 
+  getDirectionVector(): Point {
+    switch (this.direction) {
+      case 'right':
+        return { x: 1, y: 0 };
+      case 'left':
+        return { x: -1, y: 0 };
+      case 'up':
+        return { x: 0, y: -1 };
+      case 'down':
+        return { x: 0, y: 1 };
+      default:
+        return { x: 1, y: 0 }; // Default to right
+    }
+  }
+
   private isOppositeDirection(currentDir: string, newDir: string): boolean {
     return (
       (currentDir === 'right' && newDir === 'left') ||
