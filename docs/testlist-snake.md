@@ -52,16 +52,15 @@
 
 - [ ] Snake with minimum length (1 segment)
 - [ ] Multiple direction changes in sequence
-- [ ] Growth at different positions
 - [ ] Snake behavior at boundaries
 - [ ] Snake behavior when body is at maximum length
 
 ### Reset/Restart Tests
 
 - [ ] Snake can reset to initial state
-- [ ] Reset preserves starting position
-- [ ] Reset clears growth
-- [ ] Reset restores initial direction
+  - [ ] position
+  - [ ] growth
+  - [ ] direction
 
 ## Test Implementation Priority
 
