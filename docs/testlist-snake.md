@@ -24,9 +24,9 @@
 ### Movement Tests
 
 - [x] Snake moves right correctly
-- [ ] Snake moves left correctly
-- [ ] Snake moves up correctly
-- [ ] Snake moves down correctly
+- [x] Snake moves left correctly
+- [x] Snake moves up correctly
+- [x] Snake moves down correctly
 - [ ] Snake cannot reverse direction immediately (right to left)
 - [ ] Snake cannot reverse direction immediately (left to right)
 - [ ] Snake cannot reverse direction immediately (up to down)
