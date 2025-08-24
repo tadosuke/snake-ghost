@@ -1,9 +1,10 @@
-import type { GameLoopState } from './types.ts';
-import { Renderer } from './renderer.ts';
+// Import type definitions and renderer from appropriate directories
+import type { GameLoopState } from '../types/types.ts';
+import { Renderer } from '../rendering/renderer.ts';
 
 /**
- * Game loop manager that handles the core update/render cycle
- * Uses requestAnimationFrame for smooth 60fps gameplay
+ * GameLoop class manages the main game loop with consistent frame timing
+ * Handles update/render cycle, pause/resume functionality, and frame rate management
  */
 export class GameLoop {
   private state: GameLoopState;

@@ -1,5 +1,5 @@
 // Import type definitions and canvas management
-import type { Point, RenderState } from './types.ts';
+import type { Point, RenderState } from '../types/types.ts';
 import { CanvasManager } from './canvas.ts';
 
 /**

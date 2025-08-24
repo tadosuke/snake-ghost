@@ -1,7 +1,7 @@
 // Import global styles and core game modules
-import './style.css';
-import { CanvasManager } from './canvas.ts';
-import { Renderer } from './renderer.ts';
+import '../styles/style.css';
+import { CanvasManager } from '../rendering/canvas.ts';
+import { Renderer } from '../rendering/renderer.ts';
 import { GameLoop } from './gameLoop.ts';
 
 /**

@@ -1,4 +1,4 @@
-import type { Point } from './types.ts';
+import type { Point } from '../types/types.ts';
 
 /**
  * Manages HTML5 canvas operations for the Snake Ghost game.
