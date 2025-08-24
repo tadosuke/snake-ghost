@@ -469,4 +469,44 @@ describe('Snake', () => {
     expect(newHead.x).toBe(initialHead.x);
     expect(newHead.y).toBe(initialHead.y + 1);
   });
+
+  it('snake head position updates correctly after movement', () => {
+    const snake = new Snake(10, 10);
+
+    // Test movement in each direction and verify head position updates
+
+    // Test right movement (default direction)
+    const initialHeadRight = snake.getHead();
+    snake.move();
+    const headAfterRight = snake.getHead();
+    expect(headAfterRight.x).toBe(initialHeadRight.x + 1);
+    expect(headAfterRight.y).toBe(initialHeadRight.y);
+
+    // Test left movement
+    snake.setDirection('up'); // intermediate direction to avoid reversal
+    snake.setDirection('left');
+    const headBeforeLeft = snake.getHead();
+    snake.move();
+    const headAfterLeft = snake.getHead();
+    expect(headAfterLeft.x).toBe(headBeforeLeft.x - 1);
+    expect(headAfterLeft.y).toBe(headBeforeLeft.y);
+
+    // Test up movement
+    snake.setDirection('right'); // intermediate direction to avoid reversal
+    snake.setDirection('up');
+    const headBeforeUp = snake.getHead();
+    snake.move();
+    const headAfterUp = snake.getHead();
+    expect(headAfterUp.x).toBe(headBeforeUp.x);
+    expect(headAfterUp.y).toBe(headBeforeUp.y - 1);
+
+    // Test down movement
+    snake.setDirection('left'); // intermediate direction to avoid reversal
+    snake.setDirection('down');
+    const headBeforeDown = snake.getHead();
+    snake.move();
+    const headAfterDown = snake.getHead();
+    expect(headAfterDown.x).toBe(headBeforeDown.x);
+    expect(headAfterDown.y).toBe(headBeforeDown.y + 1);
+  });
 });

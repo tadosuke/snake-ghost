@@ -31,7 +31,7 @@
 - [x] Snake cannot reverse direction immediately (left to right)
 - [x] Snake cannot reverse direction immediately (up to down)
 - [x] Snake cannot reverse direction immediately (down to up)
-- [ ] Snake head position updates correctly after movement
+- [x] Snake head position updates correctly after movement
 - [ ] Snake body follows head when moving
 
 ### Direction Management
