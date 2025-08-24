@@ -1,12 +1,16 @@
 import type { GameLoopState } from './types.ts';
 import { Renderer } from './renderer.ts';
 
+/**
+ * Game loop manager that handles the core update/render cycle
+ * Uses requestAnimationFrame for smooth 60fps gameplay
+ */
 export class GameLoop {
   private state: GameLoopState;
   private renderer: Renderer;
-  private animationFrameId: number | null = null;
-  private updateCallback?: (deltaTime: number) => void;
-  private renderCallback?: (renderer: Renderer) => void;
+  private animationFrameId: number | null = null; // Tracks RAF ID for cleanup
+  private updateCallback?: (deltaTime: number) => void; // Game logic update function
+  private renderCallback?: (renderer: Renderer) => void; // Rendering function
 
   constructor(renderer: Renderer) {
     this.renderer = renderer;
@@ -18,10 +22,12 @@ export class GameLoop {
     };
   }
 
+  // Set the game logic update function
   setUpdateCallback(callback: (deltaTime: number) => void): void {
     this.updateCallback = callback;
   }
 
+  // Set the rendering function
   setRenderCallback(callback: (renderer: Renderer) => void): void {
     this.renderCallback = callback;
   }
@@ -58,12 +64,14 @@ export class GameLoop {
     }
   }
 
+  // Main game loop - runs every frame
   private loop = (): void => {
     if (!this.state.isRunning) {
       return;
     }
 
     const currentTime = performance.now();
+    // Calculate delta time in seconds, capped at 100ms to prevent huge jumps
     this.state.deltaTime = Math.min(
       (currentTime - this.state.lastFrameTime) / 1000,
       0.1
@@ -71,15 +79,18 @@ export class GameLoop {
     this.state.lastFrameTime = currentTime;
 
     if (!this.state.isPaused) {
+      // Update game logic
       if (this.updateCallback) {
         this.updateCallback(this.state.deltaTime);
       }
 
+      // Render the frame
       if (this.renderCallback) {
         this.renderCallback(this.renderer);
       }
     }
 
+    // Schedule next frame
     this.animationFrameId = requestAnimationFrame(this.loop);
   };
 
