@@ -36,4 +36,33 @@ export class Snake {
   containsPosition(x: number, y: number): boolean {
     return this.body.some(segment => segment.x === x && segment.y === y);
   }
+
+  move(): void {
+    const head = this.getHead();
+    let newHead: Point;
+
+    // Calculate new head position based on direction
+    switch (this.direction) {
+      case 'right':
+        newHead = { x: head.x + 1, y: head.y };
+        break;
+      case 'left':
+        newHead = { x: head.x - 1, y: head.y };
+        break;
+      case 'up':
+        newHead = { x: head.x, y: head.y - 1 };
+        break;
+      case 'down':
+        newHead = { x: head.x, y: head.y + 1 };
+        break;
+      default:
+        newHead = { x: head.x + 1, y: head.y }; // Default to right
+    }
+
+    // Add new head to front
+    this.body.unshift(newHead);
+    
+    // Remove tail to maintain length
+    this.body.pop();
+  }
 }
