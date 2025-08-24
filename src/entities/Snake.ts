@@ -3,10 +3,12 @@ import { type Point } from '../types/types';
 export class Snake {
   private body: Point[];
   private direction: string;
+  private growthPending: number;
 
   constructor(startX: number, startY: number) {
     this.body = this.createInitialBody(startX, startY);
     this.direction = 'right';
+    this.growthPending = 0;
   }
 
   private createInitialBody(startX: number, startY: number): Point[] {
@@ -70,6 +72,10 @@ export class Snake {
     return this.body.some((segment) => segment.x === x && segment.y === y);
   }
 
+  eat(): void {
+    this.growthPending += 1;
+  }
+
   move(): void {
     const head = this.getHead();
     let newHead: Point;
@@ -95,7 +101,12 @@ export class Snake {
     // Add new head to front
     this.body.unshift(newHead);
 
-    // Remove tail to maintain length (body follows head)
-    this.body.pop();
+    // Handle growth: if growth is pending, don't remove tail
+    if (this.growthPending > 0) {
+      this.growthPending -= 1;
+    } else {
+      // Remove tail to maintain length (body follows head)
+      this.body.pop();
+    }
   }
 }

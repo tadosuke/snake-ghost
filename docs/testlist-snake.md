@@ -39,7 +39,7 @@
 
 ### Growth Tests
 
-- [ ] Snake grows when eating food
+- [x] Snake grows when eating food
 - [ ] New segment added to tail when growing
 - [ ] Snake length increases by 1 when growing
 - [ ] Growth works correctly in all directions

@@ -580,4 +580,61 @@ describe('Snake', () => {
     expect(vector1).toEqual(vector2);
     expect(vector1).not.toBe(vector2); // Should return new object each time
   });
+
+  it('snake grows when eating food', () => {
+    const snake = new Snake(10, 10);
+
+    // Verify initial state
+    const initialLength = snake.getBodyLength();
+    expect(initialLength).toBe(3);
+
+    const initialBody = [...snake.getBody()]; // Copy to avoid reference issues
+    expect(initialBody).toHaveLength(3);
+    expect(initialBody[0]).toEqual({ x: 10, y: 10 }); // Head
+    expect(initialBody[1]).toEqual({ x: 9, y: 10 }); // Body
+    expect(initialBody[2]).toEqual({ x: 8, y: 10 }); // Tail
+
+    // Trigger growth (eating food)
+    snake.eat();
+
+    // Verify growth state is set but length hasn't changed yet
+    expect(snake.getBodyLength()).toBe(3); // Length should still be 3 until next move
+
+    // Move once - this should grow the snake by 1 segment
+    snake.move();
+
+    // After moving, snake should be 1 segment longer
+    const newLength = snake.getBodyLength();
+    expect(newLength).toBe(4); // Should have grown by 1
+
+    const newBody = snake.getBody();
+    expect(newBody).toHaveLength(4);
+
+    // Head should have moved right (default direction)
+    expect(newBody[0]).toEqual({ x: 11, y: 10 }); // New head position
+
+    // Body should have followed but tail should not have been removed
+    expect(newBody[1]).toEqual({ x: 10, y: 10 }); // Old head position
+    expect(newBody[2]).toEqual({ x: 9, y: 10 }); // Old body position
+    expect(newBody[3]).toEqual({ x: 8, y: 10 }); // Old tail position (preserved due to growth)
+
+    // Verify that subsequent moves don't grow unless eat() is called again
+    const lengthBeforeSecondMove = snake.getBodyLength();
+    snake.move();
+    expect(snake.getBodyLength()).toBe(lengthBeforeSecondMove); // Should remain same length
+
+    // Test multiple growth calls
+    snake.eat();
+    snake.eat(); // Two consecutive eat() calls
+    const lengthBeforeGrowth = snake.getBodyLength();
+
+    snake.move(); // Should grow by 1
+    expect(snake.getBodyLength()).toBe(lengthBeforeGrowth + 1);
+
+    snake.move(); // Should grow by 1 again
+    expect(snake.getBodyLength()).toBe(lengthBeforeGrowth + 2);
+
+    snake.move(); // Should not grow (no more eat() calls)
+    expect(snake.getBodyLength()).toBe(lengthBeforeGrowth + 2);
+  });
 });
