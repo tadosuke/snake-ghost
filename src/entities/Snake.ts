@@ -10,4 +10,8 @@ export class Snake {
   getHead(): Point {
     return this.head;
   }
+
+  getBodyLength(): number {
+    return 3;
+  }
 }
