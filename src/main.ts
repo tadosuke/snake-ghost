@@ -1,8 +1,8 @@
 // Import global styles and core game modules
-import '../styles/style.css';
-import { CanvasManager } from '../rendering/canvas.ts';
-import { Renderer } from '../rendering/renderer.ts';
-import { GameLoop } from './gameLoop.ts';
+import './styles/style.css';
+import { CanvasManager } from './rendering/canvas.ts';
+import { Renderer } from './rendering/renderer.ts';
+import { GameLoop } from './core/gameLoop.ts';
 
 /**
  * Main Game class that orchestrates the Snake Ghost game
@@ -22,10 +22,10 @@ class Game {
     try {
       // Initialize canvas with specific dimensions for the game
       this.canvasManager = new CanvasManager('gameCanvas', 400, 300);
-      
+
       // Create renderer to handle all drawing operations
       this.renderer = new Renderer(this.canvasManager);
-      
+
       // Set up game loop for consistent frame timing
       this.gameLoop = new GameLoop(this.renderer);
 
