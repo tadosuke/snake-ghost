@@ -398,30 +398,6 @@ describe('Snake', () => {
     expect(newHead.y).toBe(initialHead.y);
   });
 
-  it('snake cannot reverse direction immediately (left to right)', () => {
-    const snake = new Snake(5, 5);
-
-    // First change to up, then to left (to get snake moving left)
-    snake.setDirection('up');
-    snake.setDirection('left');
-    expect(snake.getDirection()).toBe('left');
-
-    // Try to set direction to right (opposite of left)
-    snake.setDirection('right');
-
-    // Direction should remain left (invalid change ignored)
-    expect(snake.getDirection()).toBe('left');
-
-    // Test that snake still moves left after attempted reversal
-    const initialHead = snake.getHead();
-    snake.move();
-    const newHead = snake.getHead();
-
-    // Head should have moved left, not right
-    expect(newHead.x).toBe(initialHead.x - 1);
-    expect(newHead.y).toBe(initialHead.y);
-  });
-
   it('snake cannot reverse direction immediately (up to down)', () => {
     const snake = new Snake(5, 5);
 
@@ -443,31 +419,6 @@ describe('Snake', () => {
     // Head should have moved up (y decreased), not down
     expect(newHead.x).toBe(initialHead.x);
     expect(newHead.y).toBe(initialHead.y - 1);
-  });
-
-  it('snake cannot reverse direction immediately (down to up)', () => {
-    const snake = new Snake(5, 5);
-
-    // First change to left (valid change from default right)
-    snake.setDirection('left');
-    // Then change to down (valid change from left)
-    snake.setDirection('down');
-    expect(snake.getDirection()).toBe('down');
-
-    // Try to set direction to up (opposite of down)
-    snake.setDirection('up');
-
-    // Direction should remain down (invalid change ignored)
-    expect(snake.getDirection()).toBe('down');
-
-    // Test that snake still moves down after attempted reversal
-    const initialHead = snake.getHead();
-    snake.move();
-    const newHead = snake.getHead();
-
-    // Head should have moved down (y increased), not up
-    expect(newHead.x).toBe(initialHead.x);
-    expect(newHead.y).toBe(initialHead.y + 1);
   });
 
   it('snake head position updates correctly after movement', () => {

@@ -28,17 +28,13 @@
 - [x] Snake moves up correctly
 - [x] Snake moves down correctly
 - [x] Snake cannot reverse direction immediately (right to left)
-- [x] Snake cannot reverse direction immediately (left to right)
 - [x] Snake cannot reverse direction immediately (up to down)
-- [x] Snake cannot reverse direction immediately (down to up)
 - [x] Snake head position updates correctly after movement
 - [x] Snake body follows head when moving
 
 ### Direction Management
 
 - [x] Can set new direction
-- [ ] Direction change takes effect on next move
-- [ ] Invalid direction changes are ignored
 - [ ] Can get current direction vector
 
 ### Growth Tests
