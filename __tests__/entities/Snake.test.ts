@@ -103,4 +103,41 @@ describe('Snake', () => {
     // Verify direction method always returns the same value for same instance
     expect(snake.getDirection()).toBe(snake.getDirection());
   });
+
+  it('can get all body segments', () => {
+    const startX = 8;
+    const startY = 6;
+    const snake = new Snake(startX, startY);
+
+    // Get all body segments
+    const allSegments = snake.getBody();
+
+    // Verify we get an array of all segments
+    expect(Array.isArray(allSegments)).toBe(true);
+    expect(allSegments).toHaveLength(3);
+
+    // Verify each segment has correct Point structure
+    allSegments.forEach((segment, index) => {
+      expect(segment).toHaveProperty('x');
+      expect(segment).toHaveProperty('y');
+      expect(typeof segment.x).toBe('number');
+      expect(typeof segment.y).toBe('number');
+    });
+
+    // Verify segments are in correct order (head to tail)
+    expect(allSegments[0]).toEqual({ x: startX, y: startY }); // Head
+    expect(allSegments[1]).toEqual({ x: startX - 1, y: startY }); // Body
+    expect(allSegments[2]).toEqual({ x: startX - 2, y: startY }); // Tail
+
+    // Verify method returns reference to internal array (not a copy)
+    const segments1 = snake.getBody();
+    const segments2 = snake.getBody();
+    expect(segments1).toBe(segments2);
+
+    // Test with different starting position
+    const snake2 = new Snake(0, 0);
+    const segments3 = snake2.getBody();
+    expect(segments3).toHaveLength(3);
+    expect(segments3[0]).toEqual({ x: 0, y: 0 });
+  });
 });
