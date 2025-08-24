@@ -1,4 +1,4 @@
-import { Point } from '../types/types';
+import { type Point } from '../types/types';
 
 export class Snake {
   private head: Point;
