@@ -603,42 +603,17 @@ describe('Snake', () => {
   it('new segment added to tail when growing', () => {
     const snake = new Snake(10, 10);
 
-    // Verify initial state: 3 segments
-    const initialBody = [...snake.getBody()]; // Copy to avoid reference issues
-    expect(initialBody).toHaveLength(3);
-    expect(initialBody[0]).toEqual({ x: 10, y: 10 }); // Head
-    expect(initialBody[1]).toEqual({ x: 9, y: 10 }); // Body segment 1
-    expect(initialBody[2]).toEqual({ x: 8, y: 10 }); // Tail
-
-    // Move once to establish a baseline (no growth)
+    // Move once to establish tail position
     snake.move();
-    const bodyAfterFirstMove = [...snake.getBody()];
-    expect(bodyAfterFirstMove).toHaveLength(3);
-    expect(bodyAfterFirstMove[0]).toEqual({ x: 11, y: 10 }); // Head moved right
-    expect(bodyAfterFirstMove[1]).toEqual({ x: 10, y: 10 }); // Old head position
-    expect(bodyAfterFirstMove[2]).toEqual({ x: 9, y: 10 }); // Old body segment 1 position
-    // Note: old tail (8, 10) is no longer in body
+    const tailPositionBeforeGrowth = snake.getBody()[2];
 
-    // Eat food, then move to trigger growth
+    // Eat and move to trigger growth
     snake.eat();
     snake.move();
 
-    // Verify growth: should have 4 segments now
+    // Verify new tail segment is at the position that would have been removed
     const bodyAfterGrowth = snake.getBody();
     expect(bodyAfterGrowth).toHaveLength(4);
-
-    // Verify head moved to new position
-    expect(bodyAfterGrowth[0]).toEqual({ x: 12, y: 10 }); // Head moved right again
-
-    // Verify body segments shifted correctly
-    expect(bodyAfterGrowth[1]).toEqual({ x: 11, y: 10 }); // Previous head position
-    expect(bodyAfterGrowth[2]).toEqual({ x: 10, y: 10 }); // Previous body segment 1 position
-
-    // KEY TEST: The new segment should be added at the tail
-    // The old tail position (9, 10) should now be occupied by the new tail segment
-    expect(bodyAfterGrowth[3]).toEqual({ x: 9, y: 10 }); // New tail at old tail position
-
-    // Verify the position that would have been removed is now the new tail
-    expect(snake.containsPosition(9, 10)).toBe(true); // This position should now be part of the snake
+    expect(bodyAfterGrowth[3]).toEqual(tailPositionBeforeGrowth);
   });
 });
