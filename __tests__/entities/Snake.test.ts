@@ -23,4 +23,14 @@ describe('Snake', () => {
     
     expect(snake.getDirection()).toBe('right');
   });
+
+  it('snake body contains correct number of segments', () => {
+    const snake = new Snake(5, 5);
+    const body = snake.getBody();
+    
+    expect(body).toHaveLength(3);
+    expect(body[0]).toEqual({ x: 5, y: 5 }); // Head
+    expect(body[1]).toEqual({ x: 4, y: 5 }); // Body segment behind head
+    expect(body[2]).toEqual({ x: 3, y: 5 }); // Tail segment
+  });
 });
