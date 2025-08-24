@@ -17,4 +17,10 @@ describe('Snake', () => {
     
     expect(snake.getBodyLength()).toBe(3);
   });
+
+  it('has default direction of "right"', () => {
+    const snake = new Snake(5, 5);
+    
+    expect(snake.getDirection()).toBe('right');
+  });
 });
