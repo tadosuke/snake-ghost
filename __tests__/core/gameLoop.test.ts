@@ -29,7 +29,9 @@ describe('GameLoop', () => {
     });
     global.cancelAnimationFrame = vi.fn();
 
-    mockRenderer = new Renderer();
+    // Create a dummy CanvasManager mock object
+    const mockCanvasManager = {} as any;
+    mockRenderer = new Renderer(mockCanvasManager);
     gameLoop = new GameLoop(mockRenderer);
 
     mockUpdateCallback = vi.fn();
