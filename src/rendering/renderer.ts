@@ -9,10 +9,10 @@ import { CanvasManager } from './canvas.ts';
 export class Renderer {
   // Canvas management instance
   private canvasManager: CanvasManager;
-  
+
   // Raw 2D rendering context from the canvas
   private context: CanvasRenderingContext2D;
-  
+
   // Current rendering state (colors, line width, etc.)
   private renderState: RenderState;
 
@@ -24,14 +24,14 @@ export class Renderer {
   constructor(canvasManager: CanvasManager) {
     this.canvasManager = canvasManager;
     this.context = canvasManager.getContext();
-    
+
     // Initialize with default rendering settings
     this.renderState = {
-      fillColor: '#ffffff',    // White fill by default
-      strokeColor: '#000000',  // Black stroke by default
-      lineWidth: 1,           // 1px line width by default
+      fillColor: '#ffffff', // White fill by default
+      strokeColor: '#000000', // Black stroke by default
+      lineWidth: 1, // 1px line width by default
     };
-    
+
     // Apply the initial state to the canvas context
     this.applyRenderState();
   }
@@ -96,7 +96,7 @@ export class Renderer {
   /**
    * Draw a filled rectangle
    * @param x Left edge x coordinate
-   * @param y Top edge y coordinate  
+   * @param y Top edge y coordinate
    * @param width Rectangle width
    * @param height Rectangle height
    */

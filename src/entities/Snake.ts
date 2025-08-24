@@ -11,9 +11,9 @@ export class Snake {
 
   private createInitialBody(startX: number, startY: number): Point[] {
     return [
-      { x: startX, y: startY },     // Head
-      { x: startX - 1, y: startY }, // Body segment behind head  
-      { x: startX - 2, y: startY }  // Tail segment
+      { x: startX, y: startY }, // Head
+      { x: startX - 1, y: startY }, // Body segment behind head
+      { x: startX - 2, y: startY }, // Tail segment
     ];
   }
 
