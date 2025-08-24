@@ -208,4 +208,80 @@ describe('Snake', () => {
     snake.move();
     expect(snake.getBodyLength()).toBe(6);
   });
+
+  it('snake detects self-collision with body', () => {
+    const snake = new Snake(3, 3);
+    
+    // Initially no collision
+    expect(snake.checkSelfCollision()).toBe(false);
+    
+    // Create a collision scenario by making the snake trace a path that loops back on itself
+    snake.eat();
+    snake.eat();
+    
+    // Move right to extend the snake
+    snake.move(); // (4,3)
+    snake.move(); // (5,3)
+    
+    // Create a rectangular path that will eventually lead to collision
+    snake.setDirection('down');
+    snake.move(); // (5,4)
+    
+    snake.setDirection('left');
+    snake.move(); // (4,4)
+    snake.move(); // (3,4)
+    
+    snake.setDirection('up');
+    snake.move(); // (3,3)
+    
+    snake.setDirection('left');
+    snake.move(); // (2,3)
+    
+    snake.setDirection('up');
+    snake.move(); // (2,2)
+    
+    snake.setDirection('right');
+    snake.move(); // (3,2)
+    
+    // Now moving down would collide with body segment at (3,3)
+    snake.setDirection('down');
+    expect(snake.checkSelfCollision()).toBe(true);
+  });
+
+  it('snake detects boundary collision (walls)', () => {
+    const gameWidth = 20;
+    const gameHeight = 15;
+    
+    // Test collision detection at each boundary
+    
+    // Test right boundary collision - snake starts facing right by default
+    const snakeRight = new Snake(gameWidth - 1, 10); // Start at right edge
+    expect(snakeRight.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
+    
+    // Test left boundary collision - need to approach from the right
+    const snakeLeft = new Snake(1, 10); // Start one position right of left edge
+    snakeLeft.setDirection('up'); // Change to valid direction first
+    snakeLeft.setDirection('left'); // Now can go left
+    expect(snakeLeft.checkBoundaryCollision(gameWidth, gameHeight)).toBe(false); // At (1,10) going left to (0,10) is valid
+    
+    // Position at edge and test
+    const snakeAtLeftEdge = new Snake(0, 10);
+    snakeAtLeftEdge.setDirection('up'); // Change direction first
+    snakeAtLeftEdge.setDirection('left'); // Now try to go left from edge
+    expect(snakeAtLeftEdge.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
+    
+    // Test top boundary collision
+    const snakeTop = new Snake(10, 0); // Start at top edge
+    snakeTop.setDirection('up');
+    expect(snakeTop.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
+    
+    // Test bottom boundary collision
+    const snakeBottom = new Snake(10, gameHeight - 1); // Start at bottom edge
+    snakeBottom.setDirection('down');
+    expect(snakeBottom.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
+    
+    // Test no collision in center
+    const snakeCenter = new Snake(10, 7);
+    expect(snakeCenter.checkBoundaryCollision(gameWidth, gameHeight)).toBe(false);
+  });
 });

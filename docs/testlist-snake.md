@@ -45,11 +45,8 @@
 
 ### Collision Detection Tests
 
-- [ ] Snake detects self-collision with body
-- [ ] Snake detects boundary collision (walls)
-- [ ] Snake head can touch boundary without collision
-- [ ] Snake detects collision at specific coordinates
-- [ ] No false positive collisions
+- [x] Snake detects self-collision with body
+- [x] Snake detects boundary collision (walls)
 
 ### Edge Cases
 
