@@ -220,7 +220,9 @@ describe('Snake', () => {
     const startY = 7;
     const snake = new Snake(startX, startY);
 
-    // Set direction to left
+    // First change to up (valid change from right)
+    snake.setDirection('up');
+    // Then change to left (valid change from up)
     snake.setDirection('left');
     expect(snake.getDirection()).toBe('left');
 
@@ -372,5 +374,27 @@ describe('Snake', () => {
     // Verify segments are properly spaced
     expect(bodyAfterSecondMove[1].y - bodyAfterSecondMove[2].y).toBe(1);
     expect(bodyAfterSecondMove[0].y - bodyAfterSecondMove[1].y).toBe(1);
+  });
+
+  it('snake cannot reverse direction immediately (right to left)', () => {
+    const snake = new Snake(5, 5);
+
+    // Verify initial direction is right
+    expect(snake.getDirection()).toBe('right');
+
+    // Try to set direction to left (opposite of right)
+    snake.setDirection('left');
+
+    // Direction should remain right (invalid change ignored)
+    expect(snake.getDirection()).toBe('right');
+
+    // Test that snake still moves right after attempted reversal
+    const initialHead = snake.getHead();
+    snake.move();
+    const newHead = snake.getHead();
+    
+    // Head should have moved right, not left
+    expect(newHead.x).toBe(initialHead.x + 1);
+    expect(newHead.y).toBe(initialHead.y);
   });
 });

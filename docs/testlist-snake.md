@@ -27,7 +27,7 @@
 - [x] Snake moves left correctly
 - [x] Snake moves up correctly
 - [x] Snake moves down correctly
-- [ ] Snake cannot reverse direction immediately (right to left)
+- [x] Snake cannot reverse direction immediately (right to left)
 - [ ] Snake cannot reverse direction immediately (left to right)
 - [ ] Snake cannot reverse direction immediately (up to down)
 - [ ] Snake cannot reverse direction immediately (down to up)

@@ -33,7 +33,19 @@ export class Snake {
     return this.direction;
   }
 
+  private isOppositeDirection(currentDir: string, newDir: string): boolean {
+    return (currentDir === 'right' && newDir === 'left') ||
+           (currentDir === 'left' && newDir === 'right') ||
+           (currentDir === 'up' && newDir === 'down') ||
+           (currentDir === 'down' && newDir === 'up');
+  }
+
   setDirection(newDirection: string): void {
+    // Prevent immediate direction reversal
+    if (this.isOppositeDirection(this.direction, newDirection)) {
+      return; // Ignore invalid direction change
+    }
+    
     this.direction = newDirection;
   }
 
