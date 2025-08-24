@@ -1,5 +1,7 @@
 import { type Point } from '../types/types';
 
+const INITIAL_BODY_LENGTH = 3;
+
 export class Snake {
   private head: Point;
   private direction: string;
@@ -14,7 +16,7 @@ export class Snake {
   }
 
   getBodyLength(): number {
-    return 3;
+    return INITIAL_BODY_LENGTH;
   }
 
   getDirection(): string {
