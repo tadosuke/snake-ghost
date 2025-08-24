@@ -170,4 +170,48 @@ describe('Snake', () => {
     expect(snake2.containsPosition(-2, 0)).toBe(true); // Tail
     expect(snake2.containsPosition(1, 0)).toBe(false); // Not in body
   });
+
+  it('snake moves right correctly', () => {
+    const startX = 5;
+    const startY = 5;
+    const snake = new Snake(startX, startY);
+
+    // Verify initial state
+    expect(snake.getDirection()).toBe('right');
+    const initialBody = snake.getBody();
+    expect(initialBody).toHaveLength(3);
+    expect(initialBody[0]).toEqual({ x: startX, y: startY }); // Head
+    expect(initialBody[1]).toEqual({ x: startX - 1, y: startY }); // Body
+    expect(initialBody[2]).toEqual({ x: startX - 2, y: startY }); // Tail
+
+    // Move right
+    snake.move();
+
+    // Verify new state after moving right
+    const newBody = snake.getBody();
+    expect(newBody).toHaveLength(3); // Length should remain the same
+    
+    // Head should move one position to the right
+    expect(newBody[0]).toEqual({ x: startX + 1, y: startY });
+    
+    // Body segments should follow (previous head becomes new body segment)
+    expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
+    expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
+    
+    // Old tail should be removed (startX - 2, startY should no longer be in body)
+    expect(snake.containsPosition(startX - 2, startY)).toBe(false);
+    
+    // New head position should be in body
+    expect(snake.containsPosition(startX + 1, startY)).toBe(true);
+
+    // Test multiple moves in sequence
+    snake.move();
+    const bodyAfterSecondMove = snake.getBody();
+    expect(bodyAfterSecondMove[0]).toEqual({ x: startX + 2, y: startY }); // Head moves further right
+    expect(bodyAfterSecondMove[1]).toEqual({ x: startX + 1, y: startY }); // Previous head position
+    expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
+    
+    // Direction should remain the same
+    expect(snake.getDirection()).toBe('right');
+  });
 });
