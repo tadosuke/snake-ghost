@@ -601,4 +601,35 @@ describe('Snake', () => {
     expect(bodyAfterGrowth).toHaveLength(4);
     expect(bodyAfterGrowth[3]).toEqual(tailPositionBeforeGrowth);
   });
+
+  it('multiple consecutive growths work correctly', () => {
+    const snake = new Snake(10, 10);
+
+    // Initial length should be 3
+    expect(snake.getBodyLength()).toBe(3);
+
+    // Eat 3 times in a row (should stack growth)
+    snake.eat();
+    snake.eat();
+    snake.eat();
+
+    // Length should still be 3 (growth happens on move)
+    expect(snake.getBodyLength()).toBe(3);
+
+    // First move: length should increase to 4
+    snake.move();
+    expect(snake.getBodyLength()).toBe(4);
+
+    // Second move: length should increase to 5
+    snake.move();
+    expect(snake.getBodyLength()).toBe(5);
+
+    // Third move: length should increase to 6
+    snake.move();
+    expect(snake.getBodyLength()).toBe(6);
+
+    // Fourth move: no more pending growth, length should remain 6
+    snake.move();
+    expect(snake.getBodyLength()).toBe(6);
+  });
 });

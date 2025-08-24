@@ -41,7 +41,7 @@
 
 - [x] Snake grows when eating food
 - [x] New segment added to tail when growing
-- [ ] Multiple consecutive growths work correctly
+- [x] Multiple consecutive growths work correctly
 
 ### Collision Detection Tests
 
