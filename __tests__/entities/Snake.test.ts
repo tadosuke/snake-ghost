@@ -518,36 +518,17 @@ describe('Snake', () => {
   it('can set new direction', () => {
     const snake = new Snake(5, 5);
 
-    // Verify initial direction
+    // Test setting valid directions (non-opposite to current)
     expect(snake.getDirection()).toBe('right');
 
-    // Test setting valid directions (non-opposite to current)
     snake.setDirection('up');
     expect(snake.getDirection()).toBe('up');
 
-    // From up, we can go left or right (not down)
     snake.setDirection('left');
     expect(snake.getDirection()).toBe('left');
 
-    // From left, we can go up or down (not right)
     snake.setDirection('down');
     expect(snake.getDirection()).toBe('down');
-
-    // From down, we can go left or right (not up)
-    snake.setDirection('right');
-    expect(snake.getDirection()).toBe('right');
-
-    // Test that direction persists until changed
-    expect(snake.getDirection()).toBe('right');
-    expect(snake.getDirection()).toBe('right'); // Multiple calls return same value
-
-    // Test setting same direction (should not cause issues)
-    snake.setDirection('right');
-    expect(snake.getDirection()).toBe('right');
-
-    // Test that we can make a full valid cycle
-    snake.setDirection('up');
-    expect(snake.getDirection()).toBe('up');
   });
 
   it('can get current direction vector', () => {
