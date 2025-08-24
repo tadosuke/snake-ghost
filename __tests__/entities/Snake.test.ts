@@ -190,17 +190,17 @@ describe('Snake', () => {
     // Verify new state after moving right
     const newBody = snake.getBody();
     expect(newBody).toHaveLength(3); // Length should remain the same
-    
+
     // Head should move one position to the right
     expect(newBody[0]).toEqual({ x: startX + 1, y: startY });
-    
+
     // Body segments should follow (previous head becomes new body segment)
     expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
     expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
-    
+
     // Old tail should be removed (startX - 2, startY should no longer be in body)
     expect(snake.containsPosition(startX - 2, startY)).toBe(false);
-    
+
     // New head position should be in body
     expect(snake.containsPosition(startX + 1, startY)).toBe(true);
 
@@ -210,7 +210,7 @@ describe('Snake', () => {
     expect(bodyAfterSecondMove[0]).toEqual({ x: startX + 2, y: startY }); // Head moves further right
     expect(bodyAfterSecondMove[1]).toEqual({ x: startX + 1, y: startY }); // Previous head position
     expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
-    
+
     // Direction should remain the same
     expect(snake.getDirection()).toBe('right');
   });
@@ -239,17 +239,17 @@ describe('Snake', () => {
     // Verify new state after moving left
     const newBody = snake.getBody();
     expect(newBody).toHaveLength(3); // Length should remain the same
-    
+
     // Head should move one position to the left
     expect(newBody[0]).toEqual({ x: startX - 1, y: startY });
-    
+
     // Body segments should follow (previous head becomes new body segment)
     expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
     expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
-    
+
     // Old tail should be removed (startX - 2, startY should no longer be in body)
     expect(snake.containsPosition(startX - 2, startY)).toBe(false);
-    
+
     // New head position should be in body
     expect(snake.containsPosition(startX - 1, startY)).toBe(true);
 
@@ -259,7 +259,7 @@ describe('Snake', () => {
     expect(bodyAfterSecondMove[0]).toEqual({ x: startX - 2, y: startY }); // Head moves further left
     expect(bodyAfterSecondMove[1]).toEqual({ x: startX - 1, y: startY }); // Previous head position
     expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
-    
+
     // Direction should remain left
     expect(snake.getDirection()).toBe('left');
   });
@@ -286,17 +286,17 @@ describe('Snake', () => {
     // Verify new state after moving up
     const newBody = snake.getBody();
     expect(newBody).toHaveLength(3); // Length should remain the same
-    
+
     // Head should move one position up (y decreases)
     expect(newBody[0]).toEqual({ x: startX, y: startY - 1 });
-    
+
     // Body segments should follow (previous head becomes new body segment)
     expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
     expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
-    
+
     // Old tail should be removed
     expect(snake.containsPosition(startX - 2, startY)).toBe(false);
-    
+
     // New head position should be in body
     expect(snake.containsPosition(startX, startY - 1)).toBe(true);
 
@@ -306,7 +306,7 @@ describe('Snake', () => {
     expect(bodyAfterSecondMove[0]).toEqual({ x: startX, y: startY - 2 }); // Head moves further up
     expect(bodyAfterSecondMove[1]).toEqual({ x: startX, y: startY - 1 }); // Previous head position
     expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
-    
+
     // Direction should remain up
     expect(snake.getDirection()).toBe('up');
 
@@ -340,17 +340,17 @@ describe('Snake', () => {
     // Verify new state after moving down
     const newBody = snake.getBody();
     expect(newBody).toHaveLength(3); // Length should remain the same
-    
+
     // Head should move one position down (y increases)
     expect(newBody[0]).toEqual({ x: startX, y: startY + 1 });
-    
+
     // Body segments should follow (previous head becomes new body segment)
     expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
     expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
-    
+
     // Old tail should be removed
     expect(snake.containsPosition(startX - 2, startY)).toBe(false);
-    
+
     // New head position should be in body
     expect(snake.containsPosition(startX, startY + 1)).toBe(true);
 
@@ -360,7 +360,7 @@ describe('Snake', () => {
     expect(bodyAfterSecondMove[0]).toEqual({ x: startX, y: startY + 2 }); // Head moves further down
     expect(bodyAfterSecondMove[1]).toEqual({ x: startX, y: startY + 1 }); // Previous head position
     expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
-    
+
     // Direction should remain down
     expect(snake.getDirection()).toBe('down');
 
@@ -392,7 +392,7 @@ describe('Snake', () => {
     const initialHead = snake.getHead();
     snake.move();
     const newHead = snake.getHead();
-    
+
     // Head should have moved right, not left
     expect(newHead.x).toBe(initialHead.x + 1);
     expect(newHead.y).toBe(initialHead.y);

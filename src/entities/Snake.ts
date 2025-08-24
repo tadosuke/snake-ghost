@@ -34,10 +34,12 @@ export class Snake {
   }
 
   private isOppositeDirection(currentDir: string, newDir: string): boolean {
-    return (currentDir === 'right' && newDir === 'left') ||
-           (currentDir === 'left' && newDir === 'right') ||
-           (currentDir === 'up' && newDir === 'down') ||
-           (currentDir === 'down' && newDir === 'up');
+    return (
+      (currentDir === 'right' && newDir === 'left') ||
+      (currentDir === 'left' && newDir === 'right') ||
+      (currentDir === 'up' && newDir === 'down') ||
+      (currentDir === 'down' && newDir === 'up')
+    );
   }
 
   setDirection(newDirection: string): void {
@@ -45,12 +47,12 @@ export class Snake {
     if (this.isOppositeDirection(this.direction, newDirection)) {
       return; // Ignore invalid direction change
     }
-    
+
     this.direction = newDirection;
   }
 
   containsPosition(x: number, y: number): boolean {
-    return this.body.some(segment => segment.x === x && segment.y === y);
+    return this.body.some((segment) => segment.x === x && segment.y === y);
   }
 
   move(): void {
@@ -77,7 +79,7 @@ export class Snake {
 
     // Add new head to front
     this.body.unshift(newHead);
-    
+
     // Remove tail to maintain length
     this.body.pop();
   }
