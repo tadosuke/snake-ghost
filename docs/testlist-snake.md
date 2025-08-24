@@ -36,7 +36,7 @@
 
 ### Direction Management
 
-- [ ] Can set new direction
+- [x] Can set new direction
 - [ ] Direction change takes effect on next move
 - [ ] Invalid direction changes are ignored
 - [ ] Can get current direction vector
