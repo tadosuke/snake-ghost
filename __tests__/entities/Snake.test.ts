@@ -85,4 +85,22 @@ describe('Snake', () => {
     const snake2 = new Snake(10, 15);
     expect(snake2.getBodyLength()).toBe(3);
   });
+
+  it('can get current direction', () => {
+    const snake = new Snake(5, 5);
+    
+    // Snake should return its current direction
+    const currentDirection = snake.getDirection();
+    expect(currentDirection).toBe('right');
+    
+    // Verify direction is returned as expected type
+    expect(typeof currentDirection).toBe('string');
+    
+    // Test with different starting position to ensure consistency
+    const snake2 = new Snake(10, 15);
+    expect(snake2.getDirection()).toBe('right');
+    
+    // Verify direction method always returns the same value for same instance
+    expect(snake.getDirection()).toBe(snake.getDirection());
+  });
 });
