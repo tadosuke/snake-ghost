@@ -11,7 +11,7 @@
 ### Basic Initialization
 
 - [x] Snake body contains correct number of segments
-- [ ] First segment is the head at starting position
+- [x] First segment is the head at starting position
 - [ ] Body segments are positioned correctly behind head
 
 ### Property Access

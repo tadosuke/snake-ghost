@@ -33,4 +33,16 @@ describe('Snake', () => {
     expect(body[1]).toEqual({ x: 4, y: 5 }); // Body segment behind head
     expect(body[2]).toEqual({ x: 3, y: 5 }); // Tail segment
   });
+
+  it('first segment is the head at starting position', () => {
+    const startX = 7;
+    const startY = 3;
+    const snake = new Snake(startX, startY);
+    
+    const body = snake.getBody();
+    const head = snake.getHead();
+    
+    expect(body[0]).toBe(head);
+    expect(body[0]).toEqual({ x: startX, y: startY });
+  });
 });
