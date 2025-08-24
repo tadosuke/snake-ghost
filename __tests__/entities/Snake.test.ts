@@ -261,4 +261,58 @@ describe('Snake', () => {
     // Direction should remain left
     expect(snake.getDirection()).toBe('left');
   });
+
+  it('snake moves up correctly', () => {
+    const startX = 8;
+    const startY = 12;
+    const snake = new Snake(startX, startY);
+
+    // Set direction to up
+    snake.setDirection('up');
+    expect(snake.getDirection()).toBe('up');
+
+    // Verify initial state
+    const initialBody = snake.getBody();
+    expect(initialBody).toHaveLength(3);
+    expect(initialBody[0]).toEqual({ x: startX, y: startY }); // Head
+    expect(initialBody[1]).toEqual({ x: startX - 1, y: startY }); // Body
+    expect(initialBody[2]).toEqual({ x: startX - 2, y: startY }); // Tail
+
+    // Move up
+    snake.move();
+
+    // Verify new state after moving up
+    const newBody = snake.getBody();
+    expect(newBody).toHaveLength(3); // Length should remain the same
+    
+    // Head should move one position up (y decreases)
+    expect(newBody[0]).toEqual({ x: startX, y: startY - 1 });
+    
+    // Body segments should follow (previous head becomes new body segment)
+    expect(newBody[1]).toEqual({ x: startX, y: startY }); // Old head position
+    expect(newBody[2]).toEqual({ x: startX - 1, y: startY }); // Old body position
+    
+    // Old tail should be removed
+    expect(snake.containsPosition(startX - 2, startY)).toBe(false);
+    
+    // New head position should be in body
+    expect(snake.containsPosition(startX, startY - 1)).toBe(true);
+
+    // Test multiple moves in sequence
+    snake.move();
+    const bodyAfterSecondMove = snake.getBody();
+    expect(bodyAfterSecondMove[0]).toEqual({ x: startX, y: startY - 2 }); // Head moves further up
+    expect(bodyAfterSecondMove[1]).toEqual({ x: startX, y: startY - 1 }); // Previous head position
+    expect(bodyAfterSecondMove[2]).toEqual({ x: startX, y: startY }); // Previous body position
+    
+    // Direction should remain up
+    expect(snake.getDirection()).toBe('up');
+
+    // Verify body forms a vertical line going upward
+    expect(bodyAfterSecondMove[0].x).toBe(bodyAfterSecondMove[1].x);
+    expect(bodyAfterSecondMove[1].x).toBe(bodyAfterSecondMove[2].x);
+    expect(bodyAfterSecondMove[0].y).toBe(startY - 2);
+    expect(bodyAfterSecondMove[1].y).toBe(startY - 1);
+    expect(bodyAfterSecondMove[2].y).toBe(startY);
+  });
 });
