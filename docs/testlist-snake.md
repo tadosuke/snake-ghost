@@ -23,7 +23,7 @@
 
 ### Movement Tests
 
-- [ ] Snake moves right correctly
+- [x] Snake moves right correctly
 - [ ] Snake moves left correctly
 - [ ] Snake moves up correctly
 - [ ] Snake moves down correctly
