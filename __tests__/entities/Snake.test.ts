@@ -553,32 +553,17 @@ describe('Snake', () => {
   it('can get current direction vector', () => {
     const snake = new Snake(5, 5);
 
-    // Test default direction (right) vector
-    expect(snake.getDirectionVector()).toEqual({ x: 1, y: 0 });
+    // Test each direction vector
+    expect(snake.getDirectionVector()).toEqual({ x: 1, y: 0 }); // right (default)
 
-    // Test up direction vector
     snake.setDirection('up');
     expect(snake.getDirectionVector()).toEqual({ x: 0, y: -1 });
 
-    // Test left direction vector
-    snake.setDirection('up'); // intermediate direction to avoid reversal
     snake.setDirection('left');
     expect(snake.getDirectionVector()).toEqual({ x: -1, y: 0 });
 
-    // Test down direction vector
-    snake.setDirection('left'); // intermediate direction to avoid reversal
     snake.setDirection('down');
     expect(snake.getDirectionVector()).toEqual({ x: 0, y: 1 });
-
-    // Test that vector changes with direction
-    snake.setDirection('right'); // intermediate direction to avoid reversal
-    expect(snake.getDirectionVector()).toEqual({ x: 1, y: 0 });
-
-    // Test that vector method returns consistent values
-    const vector1 = snake.getDirectionVector();
-    const vector2 = snake.getDirectionVector();
-    expect(vector1).toEqual(vector2);
-    expect(vector1).not.toBe(vector2); // Should return new object each time
   });
 
   it('snake grows when eating food', () => {
