@@ -48,19 +48,19 @@
 - [x] Snake detects self-collision with body
 - [x] Snake detects boundary collision (walls)
 
+### Reset/Restart Tests
+
+- [x] Snake can reset to initial state
+  - [x] position
+  - [x] growth
+  - [x] direction
+
 ### Edge Cases
 
 - [ ] Snake with minimum length (1 segment)
 - [ ] Multiple direction changes in sequence
 - [ ] Snake behavior at boundaries
 - [ ] Snake behavior when body is at maximum length
-
-### Reset/Restart Tests
-
-- [ ] Snake can reset to initial state
-  - [ ] position
-  - [ ] growth
-  - [ ] direction
 
 ## Test Implementation Priority
 

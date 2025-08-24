@@ -107,6 +107,17 @@ export class Snake {
     );
   }
 
+  reset(startX: number, startY: number): void {
+    // Reset body to initial state
+    this.body = this.createInitialBody(startX, startY);
+    
+    // Reset direction to default
+    this.direction = 'right';
+    
+    // Clear any pending growth
+    this.growthPending = 0;
+  }
+
   eat(): void {
     this.growthPending += 1;
   }

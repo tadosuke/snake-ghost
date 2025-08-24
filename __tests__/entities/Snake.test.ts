@@ -284,4 +284,51 @@ describe('Snake', () => {
     const snakeCenter = new Snake(10, 7);
     expect(snakeCenter.checkBoundaryCollision(gameWidth, gameHeight)).toBe(false);
   });
+
+  it('snake can reset to initial state', () => {
+    const startX = 10;
+    const startY = 8;
+    const snake = new Snake(startX, startY);
+    
+    // Store initial state for comparison
+    const initialHead = snake.getHead();
+    const initialBody = [...snake.getBody()]; // Deep copy for comparison
+    const initialDirection = snake.getDirection();
+    const initialLength = snake.getBodyLength();
+    
+    // Modify the snake state significantly
+    snake.eat();
+    snake.eat();
+    snake.eat(); // Add growth
+    
+    // Move and change direction multiple times
+    snake.move(); // (11, 8)
+    snake.move(); // (12, 8)
+    snake.move(); // (13, 8) - should be length 6 now
+    
+    snake.setDirection('up');
+    snake.move(); // (13, 7)
+    snake.move(); // (13, 6)
+    
+    snake.setDirection('left');
+    snake.move(); // (12, 6)
+    
+    // Verify state has changed significantly
+    expect(snake.getHead()).not.toEqual(initialHead);
+    expect(snake.getBodyLength()).toBeGreaterThan(initialLength);
+    expect(snake.getDirection()).not.toBe(initialDirection);
+    
+    // Reset the snake
+    snake.reset(startX, startY);
+    
+    // Verify reset restored initial state
+    expect(snake.getHead()).toEqual(initialHead);
+    expect(snake.getBody()).toEqual(initialBody);
+    expect(snake.getDirection()).toBe(initialDirection);
+    expect(snake.getBodyLength()).toBe(initialLength);
+    
+    // Verify no pending growth
+    snake.move();
+    expect(snake.getBodyLength()).toBe(initialLength); // Should not grow
+  });
 });
