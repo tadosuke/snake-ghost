@@ -2,12 +2,12 @@
 
 ## Completed Tests ✅
 - [x] Snake initializes with starting position (x, y)
+- [x] Snake starts with initial length of 3 segments
+- [x] Snake has default direction of "right"
 
 ## Remaining Test Cases
 
 ### Basic Initialization
-- [ ] Snake starts with initial length of 3 segments
-- [ ] Snake has default direction of "right"
 - [ ] Snake body contains correct number of segments
 - [ ] First segment is the head at starting position
 - [ ] Body segments are positioned correctly behind head
