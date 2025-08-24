@@ -80,7 +80,7 @@ export class Snake {
     // Add new head to front
     this.body.unshift(newHead);
 
-    // Remove tail to maintain length
+    // Remove tail to maintain length (body follows head)
     this.body.pop();
   }
 }
