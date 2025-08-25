@@ -60,7 +60,8 @@ describe('Game', () => {
 
     // Simulate game update with sufficient time to trigger movement
     // Snake should move at consistent intervals (e.g., every 200ms)
-    const deltaTime = 250; // More than movement interval to ensure movement
+    // GameLoop provides deltaTime in seconds, so 0.25 = 250ms
+    const deltaTime = 0.25; // More than movement interval (200ms) to ensure movement
 
     // Call update method to trigger snake movement
     (game as any).update(deltaTime);

@@ -81,10 +81,12 @@ export class Game {
 
   /**
    * Handle time-based snake movement
-   * @param deltaTime Time elapsed since last update in milliseconds
+   * @param deltaTime Time elapsed since last update in seconds (from GameLoop)
    */
   private updateSnakeMovement(deltaTime: number): void {
-    this.lastMoveTime += deltaTime;
+    // Convert deltaTime from seconds to milliseconds
+    const deltaTimeMs = deltaTime * 1000;
+    this.lastMoveTime += deltaTimeMs;
 
     if (this.lastMoveTime >= Game.SNAKE_MOVE_INTERVAL) {
       this.snake.move();
