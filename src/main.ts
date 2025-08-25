@@ -15,12 +15,16 @@ export class Game {
   private static readonly SNAKE_HEAD_COLOR = '#4CAF50';
   private static readonly SNAKE_BODY_COLOR = '#8BC34A';
   private static readonly BACKGROUND_COLOR = '#242424';
+  private static readonly SNAKE_MOVE_INTERVAL = 200; // Move every 200ms
 
   // Core game systems - using definite assignment assertion since they're initialized in constructor
   private canvasManager!: CanvasManager;
   private renderer!: Renderer;
   private gameLoop!: GameLoop;
   private snake!: Snake;
+
+  // Game timing
+  private lastMoveTime = 0;
 
   /**
    * Initialize the game with all required systems
@@ -69,10 +73,23 @@ export class Game {
 
   /**
    * Update game state each frame
-   * @param _deltaTime Time elapsed since last update in milliseconds
+   * @param deltaTime Time elapsed since last update in milliseconds
    */
-  private update(_deltaTime: number): void {
-    // Game update logic will go here
+  private update(deltaTime: number): void {
+    this.updateSnakeMovement(deltaTime);
+  }
+
+  /**
+   * Handle time-based snake movement
+   * @param deltaTime Time elapsed since last update in milliseconds
+   */
+  private updateSnakeMovement(deltaTime: number): void {
+    this.lastMoveTime += deltaTime;
+
+    if (this.lastMoveTime >= Game.SNAKE_MOVE_INTERVAL) {
+      this.snake.move();
+      this.lastMoveTime = 0;
+    }
   }
 
   /**

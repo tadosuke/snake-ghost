@@ -49,4 +49,27 @@ describe('Game', () => {
       expect.stringMatching(/#[0-9a-fA-F]{6}/)
     ); // Body color
   });
+
+  it('snake moves automatically in game loop', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+    const snake = game.getSnake();
+
+    // Get initial snake head position
+    const initialHead = snake.getHead();
+    expect(initialHead).toEqual({ x: 10, y: 5 });
+
+    // Simulate game update with sufficient time to trigger movement
+    // Snake should move at consistent intervals (e.g., every 200ms)
+    const deltaTime = 250; // More than movement interval to ensure movement
+
+    // Call update method to trigger snake movement
+    (game as any).update(deltaTime);
+
+    // Verify snake has moved from initial position
+    const newHead = snake.getHead();
+    expect(newHead).not.toEqual(initialHead);
+
+    // Since snake moves right by default, new head should be one cell to the right
+    expect(newHead).toEqual({ x: 11, y: 5 });
+  });
 });
