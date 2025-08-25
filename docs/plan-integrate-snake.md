@@ -66,9 +66,9 @@
 - Keep tests simple and focused on one behavior
 - Make minimal changes to pass tests
 - Run tests frequently
-- Commit after each Red-Green-Refactor cycle
 - Use descriptive test names that explain behavior
 - Follow existing test patterns in codebase
+- run format before commit
 
 ### Don't:
 
@@ -89,6 +89,7 @@ Before moving to next cycle, verify:
 - [ ] Change is committed with clear message
 - [ ] All existing tests still pass
 - [ ] Code follows project conventions
+- [ ] All changes are Formatted
 
 ## Expected Commits
 

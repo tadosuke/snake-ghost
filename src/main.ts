@@ -10,6 +10,12 @@ import { Snake } from './entities/Snake.ts';
  * Manages canvas setup, rendering, and game loop coordination
  */
 export class Game {
+  // Game rendering constants
+  private static readonly CELL_SIZE = 20;
+  private static readonly SNAKE_HEAD_COLOR = '#4CAF50';
+  private static readonly SNAKE_BODY_COLOR = '#8BC34A';
+  private static readonly BACKGROUND_COLOR = '#242424';
+
   // Core game systems - using definite assignment assertion since they're initialized in constructor
   private canvasManager!: CanvasManager;
   private renderer!: Renderer;
@@ -71,29 +77,42 @@ export class Game {
 
   /**
    * Render the current game state to the canvas
-   * Currently displays test graphics to verify rendering pipeline
+   * Displays the snake and game status information
    * @param renderer The renderer instance for drawing operations
    */
   private render(renderer: Renderer): void {
     // Clear canvas with dark background
-    renderer.clear('#242424');
+    renderer.clear(Game.BACKGROUND_COLOR);
 
-    // Draw test rectangle (blue-ish)
-    renderer.setFillColor('#646cff');
-    renderer.fillRect(50, 50, 100, 50);
-
-    // Draw test outlined rectangle (white border)
-    renderer.setStrokeColor('#ffffff');
-    renderer.setLineWidth(2);
-    renderer.strokeRect(200, 100, 80, 80);
-
-    // Draw test circle (red-ish)
-    renderer.setFillColor('#ff6464');
-    renderer.fillCircle(320, 150, 30);
+    // Render snake
+    this.renderSnake(renderer);
 
     // Display status text
     renderer.setFillColor('#ffffff');
     renderer.drawText('Snake Ghost - Canvas Ready!', 10, 30, '16px monospace');
+  }
+
+  /**
+   * Render the snake on the canvas
+   * @param renderer The renderer instance for drawing operations
+   */
+  private renderSnake(renderer: Renderer): void {
+    const body = this.snake.getBody();
+
+    // Render each segment of the snake
+    body.forEach((segment, index) => {
+      // Head has different color from body segments
+      const color = index === 0 ? Game.SNAKE_HEAD_COLOR : Game.SNAKE_BODY_COLOR;
+      renderer.setFillColor(color);
+
+      // Draw segment as rectangle
+      renderer.fillRect(
+        segment.x * Game.CELL_SIZE,
+        segment.y * Game.CELL_SIZE,
+        Game.CELL_SIZE,
+        Game.CELL_SIZE
+      );
+    });
   }
 
   /**

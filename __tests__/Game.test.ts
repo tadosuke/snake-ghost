@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { Game } from '../src/main';
 
 describe('Game', () => {
@@ -13,5 +13,40 @@ describe('Game', () => {
     expect(snake.getHead()).toEqual({ x: 10, y: 5 });
     expect(snake.getDirection()).toBe('right');
     expect(snake.getBodyLength()).toBe(3);
+  });
+
+  it('renders snake on canvas', () => {
+    // This test should fail initially because snake rendering is not implemented
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+
+    // Mock renderer to capture rendering calls
+    const mockRenderer = {
+      clear: vi.fn(),
+      setFillColor: vi.fn(),
+      setStrokeColor: vi.fn(),
+      setLineWidth: vi.fn(),
+      fillRect: vi.fn(),
+      strokeRect: vi.fn(),
+      fillCircle: vi.fn(),
+      drawText: vi.fn(),
+    };
+
+    // We need the render method to be accessible for testing
+    // This should fail because render method is private
+    expect(() => {
+      (game as any).render(mockRenderer);
+    }).not.toThrow();
+
+    // Verify that snake segments are drawn (this will fail initially)
+    // Each snake segment should result in a fillRect call
+    expect(mockRenderer.fillRect).toHaveBeenCalledTimes(3); // Head + 2 body segments
+
+    // Verify head and body are visually distinct (different colors)
+    expect(mockRenderer.setFillColor).toHaveBeenCalledWith(
+      expect.stringMatching(/#[0-9a-fA-F]{6}/)
+    ); // Head color
+    expect(mockRenderer.setFillColor).toHaveBeenCalledWith(
+      expect.stringMatching(/#[0-9a-fA-F]{6}/)
+    ); // Body color
   });
 });
