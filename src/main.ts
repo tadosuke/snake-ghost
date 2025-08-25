@@ -3,37 +3,45 @@ import './styles/style.css';
 import { CanvasManager } from './rendering/canvas.ts';
 import { Renderer } from './rendering/renderer.ts';
 import { GameLoop } from './core/gameLoop.ts';
+import { Snake } from './entities/Snake.ts';
 
 /**
  * Main Game class that orchestrates the Snake Ghost game
  * Manages canvas setup, rendering, and game loop coordination
  */
-class Game {
+export class Game {
   // Core game systems - using definite assignment assertion since they're initialized in constructor
   private canvasManager!: CanvasManager;
   private renderer!: Renderer;
   private gameLoop!: GameLoop;
+  private snake!: Snake;
 
   /**
    * Initialize the game with all required systems
    * Sets up canvas, renderer, and game loop with error handling
+   * @param autoStart Whether to automatically initialize canvas and start the game loop (default: true)
    */
-  constructor() {
-    try {
-      // Initialize canvas with specific dimensions for the game
-      this.canvasManager = new CanvasManager('gameCanvas', 400, 300);
+  constructor(autoStart = true) {
+    // Always initialize snake - it doesn't depend on DOM
+    this.snake = new Snake(10, 5);
 
-      // Create renderer to handle all drawing operations
-      this.renderer = new Renderer(this.canvasManager);
+    if (autoStart) {
+      try {
+        // Initialize canvas with specific dimensions for the game
+        this.canvasManager = new CanvasManager('gameCanvas', 400, 300);
 
-      // Set up game loop for consistent frame timing
-      this.gameLoop = new GameLoop(this.renderer);
+        // Create renderer to handle all drawing operations
+        this.renderer = new Renderer(this.canvasManager);
 
-      // Wire up game loop callbacks and start the game
-      this.setupGameLoop();
-      this.start();
-    } catch (error) {
-      console.error('Failed to initialize game:', error);
+        // Set up game loop for consistent frame timing
+        this.gameLoop = new GameLoop(this.renderer);
+
+        // Wire up game loop callbacks and start the game
+        this.setupGameLoop();
+        this.start();
+      } catch (error) {
+        console.error('Failed to initialize game:', error);
+      }
     }
   }
 
@@ -102,6 +110,14 @@ class Game {
    */
   stop(): void {
     this.gameLoop.stop();
+  }
+
+  /**
+   * Get the snake instance for testing and game logic access
+   * @returns The current snake instance
+   */
+  getSnake(): Snake {
+    return this.snake;
   }
 }
 
