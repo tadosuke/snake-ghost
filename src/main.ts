@@ -17,6 +17,10 @@ export class Game {
   private static readonly BACKGROUND_COLOR = '#242424';
   private static readonly SNAKE_MOVE_INTERVAL = 200; // Move every 200ms
 
+  // Game dimensions constants
+  private static readonly GAME_WIDTH = 20; // Grid cells
+  private static readonly GAME_HEIGHT = 15; // Grid cells
+
   // Input handling constants
   private static readonly KEY_MAPPINGS = {
     ArrowUp: 'up',
@@ -33,6 +37,9 @@ export class Game {
 
   // Game timing
   private lastMoveTime = 0;
+
+  // Game state
+  private gameOver = false;
 
   // Input handling
   private keyPressHandler: (event: KeyboardEvent) => void;
@@ -119,14 +126,44 @@ export class Game {
    * @param deltaTime Time elapsed since last update in seconds (from GameLoop)
    */
   private updateSnakeMovement(deltaTime: number): void {
+    // Don't move if game is over
+    if (this.gameOver) {
+      return;
+    }
+
     // Convert deltaTime from seconds to milliseconds
     const deltaTimeMs = deltaTime * 1000;
     this.lastMoveTime += deltaTimeMs;
 
     if (this.lastMoveTime >= Game.SNAKE_MOVE_INTERVAL) {
+      // Check for collision before moving
+      if (this.checkCollision()) {
+        this.gameOver = true;
+        return;
+      }
+
       this.snake.move();
       this.lastMoveTime = 0;
     }
+  }
+
+  /**
+   * Check for any collision (boundary or self-collision)
+   * @returns true if collision detected, false otherwise
+   */
+  private checkCollision(): boolean {
+    return (
+      this.snake.checkBoundaryCollision(Game.GAME_WIDTH, Game.GAME_HEIGHT) ||
+      this.snake.checkSelfCollision()
+    );
+  }
+
+  /**
+   * Check if game is in game over state
+   * @returns true if game over, false otherwise
+   */
+  private isGameOver(): boolean {
+    return this.gameOver;
   }
 
   /**
@@ -141,9 +178,32 @@ export class Game {
     // Render snake
     this.renderSnake(renderer);
 
-    // Display status text
+    // Display game status
+    this.renderGameStatus(renderer);
+  }
+
+  /**
+   * Render game status text (ready, playing, or game over)
+   * @param renderer The renderer instance for drawing operations
+   */
+  private renderGameStatus(renderer: Renderer): void {
     renderer.setFillColor('#ffffff');
-    renderer.drawText('Snake Ghost - Canvas Ready!', 10, 30, '16px monospace');
+
+    if (this.gameOver) {
+      renderer.drawText(
+        'GAME OVER - Press F5 to restart',
+        10,
+        30,
+        '16px monospace'
+      );
+    } else {
+      renderer.drawText(
+        'Snake Ghost - Use arrow keys to move',
+        10,
+        30,
+        '16px monospace'
+      );
+    }
   }
 
   /**
@@ -194,6 +254,16 @@ export class Game {
     if (this.gameLoop) {
       this.gameLoop.stop();
     }
+  }
+
+  /**
+   * Reset the game to initial state
+   * Resets snake position and clears game over state
+   */
+  resetGame(): void {
+    this.gameOver = false;
+    this.lastMoveTime = 0;
+    this.snake.reset();
   }
 
   /**

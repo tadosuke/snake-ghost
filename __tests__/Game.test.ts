@@ -106,4 +106,32 @@ describe('Game', () => {
     document.dispatchEvent(leftEventAgain);
     expect(snake.getDirection()).toBe('right'); // Should remain right due to reversal prevention
   });
+
+  it('game detects snake boundary collision', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+    const snake = game.getSnake();
+
+    // Position snake near right boundary (grid is 20x15, so x=19 is the wall)
+    // Move snake to position where next move would hit right wall
+    snake.setDirection('right');
+
+    // Move snake to x=19 (at right boundary - collision should be detected)
+    for (let i = 0; i < 9; i++) {
+      snake.move(); // Snake starts at x=10, after 9 moves it should be at x=19
+    }
+    expect(snake.getHead().x).toBe(19);
+
+    // Game should detect collision for the next movement (would go to x=20, outside boundary)
+    expect((game as any).checkCollision()).toBe(true);
+
+    // Simulate the update cycle which should detect collision and set game over
+    const deltaTime = 0.25; // Enough time to trigger movement
+    (game as any).update(deltaTime);
+
+    // After collision is detected, game should be in game over state
+    expect((game as any).isGameOver()).toBe(true);
+
+    // Snake should not move after game over (should still be at x=19)
+    expect(snake.getHead().x).toBe(19);
+  });
 });
