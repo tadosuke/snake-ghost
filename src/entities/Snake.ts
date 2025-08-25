@@ -59,6 +59,54 @@ export class Snake {
     );
   }
 
+  private wouldCauseImmediateSelfCollision(newDirection: string): boolean {
+    const head = this.getHead();
+    const directionVector = this.getDirectionVectorFromString(newDirection);
+
+    // Calculate where the head would be with the new direction
+    const nextHeadPosition = {
+      x: head.x + directionVector.x,
+      y: head.y + directionVector.y,
+    };
+
+    // Check if this position would collide with the snake's body
+    // We need to be careful: when snake moves, the tail also moves
+    // So we should exclude the tail position (last segment) unless the snake is growing
+    const effectiveBodyLength =
+      this.growthPending > 0 ? this.body.length : this.body.length - 1;
+
+    // Check collision with body segments (excluding head at index 0)
+    // and excluding tail if snake is not growing
+    for (let i = 1; i < effectiveBodyLength; i++) {
+      if (
+        this.body[i].x === nextHeadPosition.x &&
+        this.body[i].y === nextHeadPosition.y
+      ) {
+        return true; // Would collide with body
+      }
+    }
+
+    return false;
+  }
+
+  private getDirectionVectorFromString(direction: string): {
+    x: number;
+    y: number;
+  } {
+    switch (direction) {
+      case 'up':
+        return { x: 0, y: -1 };
+      case 'down':
+        return { x: 0, y: 1 };
+      case 'left':
+        return { x: -1, y: 0 };
+      case 'right':
+        return { x: 1, y: 0 };
+      default:
+        return { x: 0, y: 0 };
+    }
+  }
+
   setDirection(newDirection: string): void {
     // Prevent immediate direction reversal
     if (this.isOppositeDirection(this.direction, newDirection)) {

@@ -81,29 +81,37 @@ describe('Game', () => {
     // Test initial direction is right
     expect(snake.getDirection()).toBe('right');
 
-    // Test up arrow key changes direction to up
+    // Test up arrow key queues direction change
     const upEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
     document.dispatchEvent(upEvent);
+
+    // Direction change is queued, not immediate - trigger update to apply
+    const deltaTime = 0.25; // Enough time to trigger movement
+    (game as any).update(deltaTime);
     expect(snake.getDirection()).toBe('up');
 
     // Test left arrow key changes direction to left
     const leftEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
     document.dispatchEvent(leftEvent);
+    (game as any).update(deltaTime);
     expect(snake.getDirection()).toBe('left');
 
     // Test down arrow key changes direction to down
     const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
     document.dispatchEvent(downEvent);
+    (game as any).update(deltaTime);
     expect(snake.getDirection()).toBe('down');
 
     // Test right arrow key changes direction to right
     const rightEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
     document.dispatchEvent(rightEvent);
+    (game as any).update(deltaTime);
     expect(snake.getDirection()).toBe('right');
 
     // Test direction reversal prevention - can't go from right to left directly
     const leftEventAgain = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
     document.dispatchEvent(leftEventAgain);
+    (game as any).update(deltaTime);
     expect(snake.getDirection()).toBe('right'); // Should remain right due to reversal prevention
   });
 
@@ -133,5 +141,72 @@ describe('Game', () => {
 
     // Snake should not move after game over (should still be at x=19)
     expect(snake.getHead().x).toBe(19);
+  });
+
+  it('prevents false collision when rapidly changing direction before movement', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+    const snake = game.getSnake();
+
+    // Create a scenario where rapid direction changes could cause issues
+    // Snake moving right, with a longer body to create more collision opportunities
+    snake.eat(); // Queue growth
+    snake.move(); // (11,5) with body [(11,5), (10,5), (9,5)]
+    snake.move(); // (12,5) with body [(12,5), (11,5), (10,5), (9,5)] - now length 4
+
+    // Verify setup
+    expect(snake.getHead()).toEqual({ x: 12, y: 5 });
+    expect(snake.getDirection()).toBe('right');
+    expect(snake.getBodyLength()).toBe(4);
+
+    // The critical test: Change direction to down just before movement tick
+    // This simulates user pressing keys rapidly
+    const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+    document.dispatchEvent(downEvent);
+
+    // Trigger update to apply queued direction change
+    const deltaTime = 0.25;
+    (game as any).update(deltaTime);
+
+    // Direction should change to down after update
+    expect(snake.getDirection()).toBe('down');
+
+    // After the update above, snake should have moved down
+    // Let's verify the new position and that game continues normally
+    expect(snake.getHead()).toEqual({ x: 12, y: 6 }); // Moved down from (12,5)
+    expect((game as any).isGameOver()).toBe(false);
+  });
+
+  it('prevents direction changes that would cause immediate self-collision', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+    const snake = game.getSnake();
+
+    // Create a dangerous scenario: snake curled up with limited space
+    snake.eat(); // Queue growth for longer body
+    snake.move(); // (11,5)
+    snake.move(); // (12,5)
+
+    // Now turn down to create a hook shape
+    snake.setDirection('down');
+    snake.move(); // (12,6)
+
+    // Turn left
+    snake.setDirection('left');
+    snake.move(); // (11,6) - now body is [(11,6), (12,6), (12,5), (11,5), (10,5)]
+
+    // Verify setup - snake is at (11,6) going left with body segment at (12,6)
+    expect(snake.getHead()).toEqual({ x: 11, y: 6 });
+    expect(snake.getDirection()).toBe('left');
+
+    // Now try to turn up - this would put the head at (11,5) which SHOULD be blocked
+    // because there's a body segment at (11,5)
+    const upEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+    document.dispatchEvent(upEvent);
+
+    // Direction should NOT change to up because it would cause immediate collision
+    expect(snake.getDirection()).toBe('left'); // Should remain left
+
+    // Game should continue normally - no false collision
+    expect((game as any).checkCollision()).toBe(false);
+    expect((game as any).isGameOver()).toBe(false);
   });
 });

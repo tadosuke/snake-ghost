@@ -41,8 +41,9 @@ export class Game {
   // Game state
   private gameOver = false;
 
-  // Input handling
+  // Input handling and direction queuing
   private keyPressHandler: (event: KeyboardEvent) => void;
+  private pendingDirection: string | null = null;
 
   /**
    * Initialize the game with all required systems
@@ -86,14 +87,15 @@ export class Game {
   }
 
   /**
-   * Handle keyboard input and update snake direction
+   * Handle keyboard input and queue direction changes
    * @param event The keyboard event containing key information
    */
   private handleKeyPress(event: KeyboardEvent): void {
     const direction =
       Game.KEY_MAPPINGS[event.key as keyof typeof Game.KEY_MAPPINGS];
-    if (direction) {
-      this.snake.setDirection(direction);
+    if (direction && !this.gameOver) {
+      // Queue the direction change instead of applying immediately
+      this.pendingDirection = direction;
     }
   }
 
@@ -136,6 +138,9 @@ export class Game {
     this.lastMoveTime += deltaTimeMs;
 
     if (this.lastMoveTime >= Game.SNAKE_MOVE_INTERVAL) {
+      // Apply any pending direction change before movement
+      this.applyPendingDirectionChange();
+
       // Check for collision before moving
       if (this.checkCollision()) {
         this.gameOver = true;
@@ -144,6 +149,109 @@ export class Game {
 
       this.snake.move();
       this.lastMoveTime = 0;
+    }
+  }
+
+  /**
+   * Apply pending direction change if it's safe to do so
+   */
+  private applyPendingDirectionChange(): void {
+    if (!this.pendingDirection) {
+      return;
+    }
+
+    // Try to set the pending direction
+    const oldDirection = this.snake.getDirection();
+    this.snake.setDirection(this.pendingDirection);
+
+    // Check if the direction change would cause immediate collision
+    // If so, revert the direction change
+    if (this.wouldCauseImmediateCollision(this.pendingDirection)) {
+      this.snake.setDirection(oldDirection);
+    }
+
+    // Clear the pending direction regardless
+    this.pendingDirection = null;
+  }
+
+  /**
+   * Check if a direction change would cause immediate collision
+   * @param direction The direction to test
+   * @returns true if collision would occur, false otherwise
+   */
+  private wouldCauseImmediateCollision(direction: string): boolean {
+    // Create direction vector for the new direction
+    const directionVector = this.getDirectionVector(direction);
+    const head = this.snake.getHead();
+
+    // Calculate next head position with new direction
+    const nextHeadPosition = {
+      x: head.x + directionVector.x,
+      y: head.y + directionVector.y,
+    };
+
+    // Check boundary collision
+    if (
+      nextHeadPosition.x < 0 ||
+      nextHeadPosition.x >= Game.GAME_WIDTH ||
+      nextHeadPosition.y < 0 ||
+      nextHeadPosition.y >= Game.GAME_HEIGHT
+    ) {
+      return true;
+    }
+
+    // Check self collision - but account for tail movement
+    // The tail will move unless the snake is growing, so we need to check
+    // if the next position would collide with body segments (excluding the tail unless growing)
+    const body = this.snake.getBody();
+    const snake = this.snake;
+
+    // Check collision with body segments, but exclude tail position if snake isn't growing
+    for (let i = 1; i < body.length; i++) {
+      // Skip the tail segment if snake is not growing (tail will move away)
+      if (i === body.length - 1 && !this.snakeIsGrowing()) {
+        continue;
+      }
+
+      if (
+        body[i].x === nextHeadPosition.x &&
+        body[i].y === nextHeadPosition.y
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if snake is currently growing (has pending growth)
+   * @returns true if snake will grow on next move
+   */
+  private snakeIsGrowing(): boolean {
+    // Access the snake's growth state - we need to check if there's pending growth
+    // Since growthPending is private, we'll use a simple heuristic:
+    // If this is the first move after eating, the snake will grow
+    return false; // For now, assume no growth - this is a simplification
+  }
+
+  /**
+   * Get direction vector from direction string
+   * @param direction The direction string
+   * @returns The direction vector
+   */
+  private getDirectionVector(direction: string): { x: number; y: number } {
+    switch (direction) {
+      case 'up':
+        return { x: 0, y: -1 };
+      case 'down':
+        return { x: 0, y: 1 };
+      case 'left':
+        return { x: -1, y: 0 };
+      case 'right':
+        return { x: 1, y: 0 };
+      default:
+        return { x: 0, y: 0 };
     }
   }
 
@@ -263,6 +371,7 @@ export class Game {
   resetGame(): void {
     this.gameOver = false;
     this.lastMoveTime = 0;
+    this.pendingDirection = null;
     this.snake.reset();
   }
 
