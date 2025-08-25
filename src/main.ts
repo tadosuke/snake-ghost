@@ -17,6 +17,14 @@ export class Game {
   private static readonly BACKGROUND_COLOR = '#242424';
   private static readonly SNAKE_MOVE_INTERVAL = 200; // Move every 200ms
 
+  // Input handling constants
+  private static readonly KEY_MAPPINGS = {
+    ArrowUp: 'up',
+    ArrowDown: 'down',
+    ArrowLeft: 'left',
+    ArrowRight: 'right',
+  } as const;
+
   // Core game systems - using definite assignment assertion since they're initialized in constructor
   private canvasManager!: CanvasManager;
   private renderer!: Renderer;
@@ -26,6 +34,9 @@ export class Game {
   // Game timing
   private lastMoveTime = 0;
 
+  // Input handling
+  private keyPressHandler: (event: KeyboardEvent) => void;
+
   /**
    * Initialize the game with all required systems
    * Sets up canvas, renderer, and game loop with error handling
@@ -34,6 +45,10 @@ export class Game {
   constructor(autoStart = true) {
     // Always initialize snake - it doesn't depend on DOM
     this.snake = new Snake(10, 5);
+
+    // Initialize input handler and set up keyboard input handling
+    this.keyPressHandler = this.handleKeyPress.bind(this);
+    this.setupKeyboardInput();
 
     if (autoStart) {
       try {
@@ -52,6 +67,26 @@ export class Game {
       } catch (error) {
         console.error('Failed to initialize game:', error);
       }
+    }
+  }
+
+  /**
+   * Set up keyboard input handling for snake control
+   * Maps arrow keys to snake direction changes
+   */
+  private setupKeyboardInput(): void {
+    document.addEventListener('keydown', this.keyPressHandler);
+  }
+
+  /**
+   * Handle keyboard input and update snake direction
+   * @param event The keyboard event containing key information
+   */
+  private handleKeyPress(event: KeyboardEvent): void {
+    const direction =
+      Game.KEY_MAPPINGS[event.key as keyof typeof Game.KEY_MAPPINGS];
+    if (direction) {
+      this.snake.setDirection(direction);
     }
   }
 
@@ -148,6 +183,17 @@ export class Game {
    */
   stop(): void {
     this.gameLoop.stop();
+  }
+
+  /**
+   * Clean up game resources and event listeners
+   * Call this method when the game is no longer needed
+   */
+  cleanup(): void {
+    document.removeEventListener('keydown', this.keyPressHandler);
+    if (this.gameLoop) {
+      this.gameLoop.stop();
+    }
   }
 
   /**

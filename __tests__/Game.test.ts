@@ -73,4 +73,37 @@ describe('Game', () => {
     // Since snake moves right by default, new head should be one cell to the right
     expect(newHead).toEqual({ x: 11, y: 5 });
   });
+
+  it('snake responds to keyboard input', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+    const snake = game.getSnake();
+
+    // Test initial direction is right
+    expect(snake.getDirection()).toBe('right');
+
+    // Test up arrow key changes direction to up
+    const upEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+    document.dispatchEvent(upEvent);
+    expect(snake.getDirection()).toBe('up');
+
+    // Test left arrow key changes direction to left
+    const leftEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+    document.dispatchEvent(leftEvent);
+    expect(snake.getDirection()).toBe('left');
+
+    // Test down arrow key changes direction to down
+    const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+    document.dispatchEvent(downEvent);
+    expect(snake.getDirection()).toBe('down');
+
+    // Test right arrow key changes direction to right
+    const rightEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+    document.dispatchEvent(rightEvent);
+    expect(snake.getDirection()).toBe('right');
+
+    // Test direction reversal prevention - can't go from right to left directly
+    const leftEventAgain = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+    document.dispatchEvent(leftEventAgain);
+    expect(snake.getDirection()).toBe('right'); // Should remain right due to reversal prevention
+  });
 });
