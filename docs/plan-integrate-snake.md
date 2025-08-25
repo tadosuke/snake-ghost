@@ -3,12 +3,14 @@
 ## Current State Assessment
 
 ### Snake.ts Implementation: ✅ COMPLETE
+
 - All core Snake functionality is implemented and thoroughly tested
 - 15 comprehensive test cases covering initialization, movement, growth, collision detection, and reset
 - Code quality is excellent with clear separation of concerns
 - No bugs or missing functionality identified in the Snake class itself
 
 ### Missing Integration: 🔄 NEEDS COMPLETION
+
 - The main game (`main.ts`) only renders test graphics
 - Snake class is not instantiated or integrated into the game loop
 - No keyboard input handling for snake control
@@ -17,31 +19,41 @@
 ## TDD Integration Plan
 
 ### Phase 1: Snake Instance Creation (RED-GREEN-REFACTOR)
+
 **Test**: `it('creates snake instance in game')`
+
 - Write failing test for Game class having a Snake instance
 - Implement Snake instantiation in Game constructor
 - Verify snake is created with proper initial position
 
 ### Phase 2: Snake Rendering (RED-GREEN-REFACTOR)
+
 **Test**: `it('renders snake on canvas')`
+
 - Write test to verify snake body segments are drawn
 - Replace test graphics with snake rendering logic
 - Test that snake head and body are visually distinct
 
 ### Phase 3: Basic Movement Integration (RED-GREEN-REFACTOR)
+
 **Test**: `it('snake moves automatically in game loop')`
+
 - Add time-based movement to snake in update loop
 - Test that snake moves at consistent intervals
 - Verify snake position changes over time
 
 ### Phase 4: Input Integration (RED-GREEN-REFACTOR)
+
 **Test**: `it('snake responds to keyboard input')`
+
 - Add keyboard event listeners for arrow keys
 - Connect input to snake direction changes
 - Test direction changes work correctly
 
 ### Phase 5: Boundary Collision Integration (RED-GREEN-REFACTOR)
+
 **Test**: `it('game detects snake boundary collision')`
+
 - Integrate snake boundary collision with game state
 - Test game over condition triggers correctly
 - Verify game stops when snake hits walls
@@ -49,6 +61,7 @@
 ## TDD Rules to Follow
 
 ### Do:
+
 - Write implementation code AFTER tests
 - Keep tests simple and focused on one behavior
 - Make minimal changes to pass tests
@@ -58,6 +71,7 @@
 - Follow existing test patterns in codebase
 
 ### Don't:
+
 - Write implementation code before tests
 - Skip the failing test verification step
 - Write multiple features in one cycle
@@ -68,6 +82,7 @@
 ## Quality Gates
 
 Before moving to next cycle, verify:
+
 - [ ] Test is written and fails (Red)
 - [ ] Minimal implementation makes test pass (Green)
 - [ ] Code is clean while tests still pass (Refactor)

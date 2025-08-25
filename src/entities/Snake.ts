@@ -75,32 +75,35 @@ export class Snake {
   checkSelfCollision(): boolean {
     const head = this.getHead();
     const direction = this.getDirectionVector();
-    
+
     // Calculate the next position the head would move to
     const nextHeadPosition = {
       x: head.x + direction.x,
-      y: head.y + direction.y
+      y: head.y + direction.y,
     };
-    
+
     // Check if next head position collides with any body segment (excluding the head itself)
-    return this.body.slice(1).some((segment) => 
-      segment.x === nextHeadPosition.x && segment.y === nextHeadPosition.y
-    );
+    return this.body
+      .slice(1)
+      .some(
+        (segment) =>
+          segment.x === nextHeadPosition.x && segment.y === nextHeadPosition.y
+      );
   }
 
   checkBoundaryCollision(gameWidth: number, gameHeight: number): boolean {
     const head = this.getHead();
     const direction = this.getDirectionVector();
-    
+
     // Calculate the next position the head would move to
     const nextHeadPosition = {
       x: head.x + direction.x,
-      y: head.y + direction.y
+      y: head.y + direction.y,
     };
-    
+
     // Check if next position is outside game boundaries
     return (
-      nextHeadPosition.x < 0 || 
+      nextHeadPosition.x < 0 ||
       nextHeadPosition.x >= gameWidth ||
       nextHeadPosition.y < 0 ||
       nextHeadPosition.y >= gameHeight
@@ -110,10 +113,10 @@ export class Snake {
   reset(startX: number, startY: number): void {
     // Reset body to initial state
     this.body = this.createInitialBody(startX, startY);
-    
+
     // Reset direction to default
     this.direction = 'right';
-    
+
     // Clear any pending growth
     this.growthPending = 0;
   }

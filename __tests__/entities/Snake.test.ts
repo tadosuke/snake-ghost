@@ -211,38 +211,38 @@ describe('Snake', () => {
 
   it('snake detects self-collision with body', () => {
     const snake = new Snake(3, 3);
-    
+
     // Initially no collision
     expect(snake.checkSelfCollision()).toBe(false);
-    
+
     // Create a collision scenario by making the snake trace a path that loops back on itself
     snake.eat();
     snake.eat();
-    
+
     // Move right to extend the snake
     snake.move(); // (4,3)
     snake.move(); // (5,3)
-    
+
     // Create a rectangular path that will eventually lead to collision
     snake.setDirection('down');
     snake.move(); // (5,4)
-    
+
     snake.setDirection('left');
     snake.move(); // (4,4)
     snake.move(); // (3,4)
-    
+
     snake.setDirection('up');
     snake.move(); // (3,3)
-    
+
     snake.setDirection('left');
     snake.move(); // (2,3)
-    
+
     snake.setDirection('up');
     snake.move(); // (2,2)
-    
+
     snake.setDirection('right');
     snake.move(); // (3,2)
-    
+
     // Now moving down would collide with body segment at (3,3)
     snake.setDirection('down');
     expect(snake.checkSelfCollision()).toBe(true);
@@ -251,40 +251,44 @@ describe('Snake', () => {
   it('snake detects boundary collision (walls)', () => {
     const gameWidth = 20;
     const gameHeight = 15;
-    
+
     // Test collision at each boundary
     const snakeRight = new Snake(gameWidth - 1, 10);
     expect(snakeRight.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
-    
+
     const snakeLeft = new Snake(0, 10);
     snakeLeft.setDirection('up');
     snakeLeft.setDirection('left');
     expect(snakeLeft.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
-    
+
     const snakeTop = new Snake(10, 0);
     snakeTop.setDirection('up');
     expect(snakeTop.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
-    
+
     const snakeBottom = new Snake(10, gameHeight - 1);
     snakeBottom.setDirection('down');
-    expect(snakeBottom.checkBoundaryCollision(gameWidth, gameHeight)).toBe(true);
-    
+    expect(snakeBottom.checkBoundaryCollision(gameWidth, gameHeight)).toBe(
+      true
+    );
+
     // Test no collision in center
     const snakeCenter = new Snake(10, 7);
-    expect(snakeCenter.checkBoundaryCollision(gameWidth, gameHeight)).toBe(false);
+    expect(snakeCenter.checkBoundaryCollision(gameWidth, gameHeight)).toBe(
+      false
+    );
   });
 
   it('snake can reset to initial state', () => {
     const startX = 10;
     const startY = 8;
     const snake = new Snake(startX, startY);
-    
+
     // Store initial state
     const initialHead = snake.getHead();
     const initialBody = [...snake.getBody()];
     const initialDirection = snake.getDirection();
     const initialLength = snake.getBodyLength();
-    
+
     // Modify snake state: add growth, move, and change direction
     snake.eat();
     snake.eat();
@@ -292,14 +296,14 @@ describe('Snake', () => {
     snake.move();
     snake.setDirection('up');
     snake.move();
-    
+
     // Reset and verify all state is restored
     snake.reset(startX, startY);
     expect(snake.getHead()).toEqual(initialHead);
     expect(snake.getBody()).toEqual(initialBody);
     expect(snake.getDirection()).toBe(initialDirection);
     expect(snake.getBodyLength()).toBe(initialLength);
-    
+
     // Verify growth is cleared
     snake.move();
     expect(snake.getBodyLength()).toBe(initialLength);
