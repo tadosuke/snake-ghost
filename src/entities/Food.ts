@@ -20,4 +20,26 @@ export class Food {
     const y = Math.floor(Math.random() * gameHeight);
     this.setPosition(x, y);
   }
+
+  isValidPosition(snakeBody: Point[]): boolean {
+    const currentPosition = this.getPosition();
+    return !snakeBody.some(
+      (segment) =>
+        segment.x === currentPosition.x && segment.y === currentPosition.y
+    );
+  }
+
+  generateRandomPositionAvoidingSnake(
+    gameWidth: number,
+    gameHeight: number,
+    snakeBody: Point[]
+  ): void {
+    let attempts = 0;
+    const maxAttempts = gameWidth * gameHeight; // Prevent infinite loop
+
+    do {
+      this.generateRandomPosition(gameWidth, gameHeight);
+      attempts++;
+    } while (!this.isValidPosition(snakeBody) && attempts < maxAttempts);
+  }
 }
