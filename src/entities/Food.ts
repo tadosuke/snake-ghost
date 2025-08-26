@@ -1,4 +1,4 @@
-import { Point } from '../types/types';
+import { type Point } from '../types/types';
 import { Snake } from './Snake';
 
 export class Food {
