@@ -365,7 +365,7 @@ export class Game {
     this.gameOver = false;
     this.lastMoveTime = 0;
     this.pendingDirection = null;
-    this.snake.reset();
+    this.snake.reset(10, 7);
   }
 
   /**
