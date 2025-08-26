@@ -108,4 +108,39 @@ describe('Food', () => {
     // Verify position is valid (not on snake)
     expect(food.isValidPosition(snake.getBody())).toBe(true);
   });
+
+  it('detects when snake head position matches food position', () => {
+    const snake = new Snake(10, 10);
+    const food = new Food(15, 8);
+
+    // Initially no consumption (different positions)
+    expect(food.isConsumedBy(snake)).toBe(false);
+
+    // Move food to snake head position
+    const head = snake.getHead();
+    food.setPosition(head.x, head.y);
+
+    // Should detect consumption
+    expect(food.isConsumedBy(snake)).toBe(true);
+  });
+
+  it('isConsumedBy method returns boolean correctly', () => {
+    const snake = new Snake(5, 5);
+    const food = new Food(0, 0);
+
+    // Test various scenarios
+    expect(food.isConsumedBy(snake)).toBe(false); // Different positions
+
+    // Move snake and check consumption at different positions
+    snake.move(); // Snake head moves right to (6, 5)
+    expect(food.isConsumedBy(snake)).toBe(false);
+
+    // Place food at new snake head position
+    food.setPosition(6, 5);
+    expect(food.isConsumedBy(snake)).toBe(true);
+
+    // Move food away
+    food.setPosition(10, 10);
+    expect(food.isConsumedBy(snake)).toBe(false);
+  });
 });

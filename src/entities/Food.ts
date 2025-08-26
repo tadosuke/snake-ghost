@@ -1,4 +1,5 @@
 import { Point } from '../types/types';
+import { Snake } from './Snake';
 
 export class Food {
   private position: Point;
@@ -41,5 +42,14 @@ export class Food {
       this.generateRandomPosition(gameWidth, gameHeight);
       attempts++;
     } while (!this.isValidPosition(snakeBody) && attempts < maxAttempts);
+  }
+
+  isConsumedBy(snake: Snake): boolean {
+    const snakeHead = snake.getHead();
+    const currentPosition = this.getPosition();
+
+    return (
+      snakeHead.x === currentPosition.x && snakeHead.y === currentPosition.y
+    );
   }
 }
