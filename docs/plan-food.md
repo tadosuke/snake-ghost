@@ -3,12 +3,15 @@
 ## Phase 1: Create Food Entity Foundation (Red → Green → Refactor)
 
 ### 1.1 Food Entity Basic Structure
+
 **RED:** Write failing test for Food class creation
-- Create `__tests__/entities/Food.test.ts` 
+
+- Create `__tests__/entities/Food.test.ts`
 - Test: Food instance creation with position coordinates
 - **Expected failure:** Food class doesn't exist
 
 **GREEN:** Create minimal Food class
+
 - Create `src/entities/Food.ts`
 - Basic Food class with constructor accepting x, y coordinates
 - Implement `getPosition()` method
@@ -17,7 +20,9 @@
 **COMMIT:** `test: Add Food entity basic structure`
 
 ### 1.2 Food Position Management
+
 **RED:** Write failing tests for position operations
+
 - Test: `getPosition()` returns correct coordinates
 - Test: `setPosition()` updates position correctly
 
@@ -28,7 +33,9 @@
 ## Phase 2: Food Generation Logic (Red → Green → Refactor)
 
 ### 2.1 Random Food Placement
+
 **RED:** Write failing tests for food generation
+
 - Test: Generate random food position within game boundaries
 - Test: Food position is within valid game grid
 
@@ -37,7 +44,9 @@
 **COMMIT:** `feat: Add random food generation`
 
 ### 2.2 Collision Avoidance
+
 **RED:** Write failing tests for snake collision avoidance
+
 - Test: Food doesn't generate on snake body positions
 - Test: Food regenerates if initial position conflicts with snake
 
@@ -48,7 +57,9 @@
 ## Phase 3: Food-Snake Interaction (Red → Green → Refactor)
 
 ### 3.1 Food Consumption Detection
+
 **RED:** Write failing tests for consumption logic
+
 - Test: Detect when snake head position matches food position
 - Test: `isConsumedBy(snake)` method returns boolean correctly
 
@@ -57,7 +68,9 @@
 **COMMIT:** `feat: Add food consumption detection`
 
 ### 3.2 Food Respawn System
+
 **RED:** Write failing tests for respawn mechanics
+
 - Test: Food generates new position after consumption
 - Test: New position avoids snake body
 
@@ -68,7 +81,9 @@
 ## Phase 4: Game Integration (Red → Green → Refactor)
 
 ### 4.1 Game Class Food Management
+
 **RED:** Write failing tests for Game class food integration
+
 - Update `__tests__/Game.test.ts` (create if needed)
 - Test: Game creates food instance
 - Test: Game renders food on canvas
@@ -78,12 +93,15 @@
 **COMMIT:** `feat: Integrate food into Game class`
 
 ### 4.2 Snake-Food Interaction in Game Loop
+
 **RED:** Write failing tests for game loop integration
+
 - Test: Snake grows when eating food
 - Test: Food respawns after being eaten
 - Test: Game continues running after food consumption
 
 **GREEN:** Add food collision checking to game update loop
+
 - Connect snake.eat() to food consumption
 - Trigger food respawn after consumption
 
@@ -93,7 +111,9 @@
 ## Phase 5: Visual Enhancement (Red → Green → Refactor)
 
 ### 5.1 Food Rendering
+
 **RED:** Write failing tests for food visualization
+
 - Test: Food renders at correct position
 - Test: Food has appropriate color/style
 
@@ -104,7 +124,9 @@
 ## Phase 6: Final Integration & Testing
 
 ### 6.1 End-to-End Testing
+
 **RED:** Write integration tests
+
 - Test complete food lifecycle (spawn → consume → respawn)
 - Test game state remains consistent
 
@@ -113,21 +135,24 @@
 **COMMIT:** `feat: Complete food system integration`
 
 ## TDD Quality Gates (Check after each cycle)
+
 - [ ] Test written first and fails (Red)
-- [ ] Minimal code written to pass test (Green)  
+- [ ] Minimal code written to pass test (Green)
 - [ ] Code refactored while maintaining passing tests (Refactor)
 - [ ] Changes committed with clear message
 - [ ] All existing tests still pass
 - [ ] Code follows existing project patterns
 
 ## Commands to use:
+
 - `npm test` - Run all tests
 - `npm format` - Format code
 - `git add . && git commit -m "[message]"` - Commit changes
 
 ## Files to be created/modified:
+
 - **New:** `src/entities/Food.ts`
-- **New:** `__tests__/entities/Food.test.ts`  
+- **New:** `__tests__/entities/Food.test.ts`
 - **Modified:** `src/main.ts` (Game class)
 - **Modified:** `src/types/types.ts` (if needed for Food types)
 - **Potentially Modified:** `__tests__/Game.test.ts`
