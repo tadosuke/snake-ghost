@@ -27,4 +27,40 @@ describe('Food', () => {
     // Verify new position
     expect(food.getPosition()).toEqual({ x: 20, y: 25 });
   });
+
+  it('generates random position within game boundaries', () => {
+    const gameWidth = 20;
+    const gameHeight = 15;
+    const food = new Food(0, 0);
+
+    // Generate random position
+    food.generateRandomPosition(gameWidth, gameHeight);
+
+    // Verify position is within boundaries
+    const position = food.getPosition();
+    expect(position.x).toBeGreaterThanOrEqual(0);
+    expect(position.x).toBeLessThan(gameWidth);
+    expect(position.y).toBeGreaterThanOrEqual(0);
+    expect(position.y).toBeLessThan(gameHeight);
+  });
+
+  it('food position is within valid game grid', () => {
+    const gameWidth = 10;
+    const gameHeight = 8;
+    const food = new Food(0, 0);
+
+    // Generate multiple positions to test randomness
+    for (let i = 0; i < 100; i++) {
+      food.generateRandomPosition(gameWidth, gameHeight);
+      const position = food.getPosition();
+
+      // All positions must be integers within grid bounds
+      expect(Number.isInteger(position.x)).toBe(true);
+      expect(Number.isInteger(position.y)).toBe(true);
+      expect(position.x).toBeGreaterThanOrEqual(0);
+      expect(position.x).toBeLessThan(gameWidth);
+      expect(position.y).toBeGreaterThanOrEqual(0);
+      expect(position.y).toBeLessThan(gameHeight);
+    }
+  });
 });

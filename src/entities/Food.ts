@@ -14,4 +14,10 @@ export class Food {
   setPosition(x: number, y: number): void {
     this.position = { x, y };
   }
+
+  generateRandomPosition(gameWidth: number, gameHeight: number): void {
+    const x = Math.floor(Math.random() * gameWidth);
+    const y = Math.floor(Math.random() * gameHeight);
+    this.setPosition(x, y);
+  }
 }
