@@ -143,4 +143,51 @@ describe('Food', () => {
     food.setPosition(10, 10);
     expect(food.isConsumedBy(snake)).toBe(false);
   });
+
+  it('food generates new position after consumption', () => {
+    const snake = new Snake(5, 5);
+    const food = new Food(5, 5); // Place food at snake head initially
+    const gameWidth = 20;
+    const gameHeight = 15;
+
+    // Verify food is at snake head position (consumed)
+    expect(food.isConsumedBy(snake)).toBe(true);
+
+    // Respawn food
+    food.respawn(gameWidth, gameHeight, snake.getBody());
+
+    // Verify food is no longer at snake position
+    expect(food.isConsumedBy(snake)).toBe(false);
+    expect(food.isValidPosition(snake.getBody())).toBe(true);
+  });
+
+  it('new position avoids snake body after respawn', () => {
+    const snake = new Snake(10, 10);
+    const food = new Food(0, 0);
+    const gameWidth = 15;
+    const gameHeight = 12;
+
+    // Make snake longer to increase collision opportunities
+    snake.eat();
+    snake.eat();
+    snake.eat();
+    snake.move();
+    snake.move();
+    snake.move();
+
+    // Test respawn multiple times to ensure reliability
+    for (let i = 0; i < 10; i++) {
+      food.respawn(gameWidth, gameHeight, snake.getBody());
+
+      // Verify food is not on any snake body segment
+      expect(food.isValidPosition(snake.getBody())).toBe(true);
+
+      // Verify food is within game boundaries
+      const position = food.getPosition();
+      expect(position.x).toBeGreaterThanOrEqual(0);
+      expect(position.x).toBeLessThan(gameWidth);
+      expect(position.y).toBeGreaterThanOrEqual(0);
+      expect(position.y).toBeLessThan(gameHeight);
+    }
+  });
 });

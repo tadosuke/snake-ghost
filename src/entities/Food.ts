@@ -52,4 +52,8 @@ export class Food {
       snakeHead.x === currentPosition.x && snakeHead.y === currentPosition.y
     );
   }
+
+  respawn(gameWidth: number, gameHeight: number, snakeBody: Point[]): void {
+    this.generateRandomPositionAvoidingSnake(gameWidth, gameHeight, snakeBody);
+  }
 }
