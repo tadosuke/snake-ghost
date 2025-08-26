@@ -295,18 +295,11 @@ export class Game {
    * @param renderer The renderer instance for drawing operations
    */
   private renderGameStatus(renderer: Renderer): void {
-    renderer.setFillColor('#ffffff');
+    renderer.setFillColor('#ff0000');
 
     if (this.gameOver) {
       renderer.drawText(
         'GAME OVER - Press F5 to restart',
-        10,
-        30,
-        '16px monospace'
-      );
-    } else {
-      renderer.drawText(
-        'Snake Ghost - Use arrow keys to move',
         10,
         30,
         '16px monospace'
