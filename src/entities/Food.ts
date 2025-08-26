@@ -10,4 +10,8 @@ export class Food {
   getPosition(): Point {
     return this.position;
   }
+
+  setPosition(x: number, y: number): void {
+    this.position = { x, y };
+  }
 }
