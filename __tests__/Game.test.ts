@@ -38,8 +38,8 @@ describe('Game', () => {
     }).not.toThrow();
 
     // Verify that snake segments are drawn (this will fail initially)
-    // Each snake segment should result in a fillRect call
-    expect(mockRenderer.fillRect).toHaveBeenCalledTimes(3); // Head + 2 body segments
+    // Each snake segment should result in a fillRect call + 1 food fillRect call
+    expect(mockRenderer.fillRect).toHaveBeenCalledTimes(4); // Head + 2 body segments + food
 
     // Verify head and body are visually distinct (different colors)
     expect(mockRenderer.setFillColor).toHaveBeenCalledWith(
@@ -208,5 +208,54 @@ describe('Game', () => {
     // Game should continue normally - no false collision
     expect((game as any).checkCollision()).toBe(false);
     expect((game as any).isGameOver()).toBe(false);
+  });
+
+  // Phase 4.1 Tests: Game Class Food Integration
+  it('creates food instance in game', () => {
+    const game = new Game(false); // Don't autostart for testing
+
+    // Test that game has a food instance
+    expect((game as any).getFood()).toBeDefined();
+
+    // Test food has proper initial position within game boundaries
+    const food = (game as any).getFood();
+    const position = food.getPosition();
+    expect(position.x).toBeGreaterThanOrEqual(0);
+    expect(position.x).toBeLessThan(20); // GAME_WIDTH / CELL_SIZE
+    expect(position.y).toBeGreaterThanOrEqual(0);
+    expect(position.y).toBeLessThan(15); // GAME_HEIGHT / CELL_SIZE
+  });
+
+  it('renders food on canvas', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+
+    // Mock renderer to capture rendering calls
+    const mockRenderer = {
+      clear: vi.fn(),
+      setFillColor: vi.fn(),
+      setStrokeColor: vi.fn(),
+      setLineWidth: vi.fn(),
+      fillRect: vi.fn(),
+      strokeRect: vi.fn(),
+      fillCircle: vi.fn(),
+      drawText: vi.fn(),
+    };
+
+    // Render method should not throw
+    expect(() => {
+      (game as any).render(mockRenderer);
+    }).not.toThrow();
+
+    // Verify that food is rendered - should result in a fillRect call for food
+    // Food should be rendered as a rectangle at its position
+    const food = (game as any).getFood();
+    const position = food.getPosition();
+
+    expect(mockRenderer.fillRect).toHaveBeenCalledWith(
+      position.x * 20, // position * CELL_SIZE
+      position.y * 20,
+      20, // CELL_SIZE
+      20 // CELL_SIZE
+    );
   });
 });

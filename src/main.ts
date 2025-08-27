@@ -4,6 +4,7 @@ import { CanvasManager } from './rendering/canvas.ts';
 import { Renderer } from './rendering/renderer.ts';
 import { GameLoop } from './core/gameLoop.ts';
 import { Snake } from './entities/Snake.ts';
+import { Food } from './entities/Food.ts';
 
 /**
  * Main Game class that orchestrates the Snake Ghost game
@@ -14,6 +15,7 @@ export class Game {
   private static readonly CELL_SIZE = 20;
   private static readonly SNAKE_HEAD_COLOR = '#4CAF50';
   private static readonly SNAKE_BODY_COLOR = '#8BC34A';
+  private static readonly FOOD_COLOR = '#FF4444';
   private static readonly BACKGROUND_COLOR = '#242424';
   private static readonly SNAKE_MOVE_INTERVAL = 200; // Move every 200ms
 
@@ -34,6 +36,7 @@ export class Game {
   private renderer!: Renderer;
   private gameLoop!: GameLoop;
   private snake!: Snake;
+  private food!: Food;
 
   // Game timing
   private lastMoveTime = 0;
@@ -53,6 +56,14 @@ export class Game {
   constructor(autoStart = true) {
     // Always initialize snake - it doesn't depend on DOM
     this.snake = new Snake(10, 5);
+
+    // Initialize food with random position avoiding snake
+    this.food = new Food(0, 0);
+    this.food.generateRandomPositionAvoidingSnake(
+      Game.GAME_WIDTH,
+      Game.GAME_HEIGHT,
+      this.snake.getBody()
+    );
 
     // Initialize input handler and set up keyboard input handling
     this.keyPressHandler = this.handleKeyPress.bind(this);
@@ -286,6 +297,9 @@ export class Game {
     // Render snake
     this.renderSnake(renderer);
 
+    // Render food
+    this.renderFood(renderer);
+
     // Display game status
     this.renderGameStatus(renderer);
   }
@@ -328,6 +342,25 @@ export class Game {
         Game.CELL_SIZE
       );
     });
+  }
+
+  /**
+   * Render food on the canvas
+   * @param renderer The renderer instance for drawing operations
+   */
+  private renderFood(renderer: Renderer): void {
+    const position = this.food.getPosition();
+
+    // Set food color using constant
+    renderer.setFillColor(Game.FOOD_COLOR);
+
+    // Render food as a rectangle at its position
+    renderer.fillRect(
+      position.x * Game.CELL_SIZE,
+      position.y * Game.CELL_SIZE,
+      Game.CELL_SIZE,
+      Game.CELL_SIZE
+    );
   }
 
   /**
@@ -374,6 +407,10 @@ export class Game {
    */
   getSnake(): Snake {
     return this.snake;
+  }
+
+  getFood(): Food {
+    return this.food;
   }
 }
 
