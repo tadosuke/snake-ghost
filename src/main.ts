@@ -168,8 +168,14 @@ export class Game {
   }
 
   /**
-   * Check and handle food consumption by snake
-   * This method processes the food-snake interaction when the snake head overlaps with food
+   * Handle food consumption by snake in the game loop
+   *
+   * This method integrates the complete food lifecycle:
+   * 1. Detects when snake head overlaps with food position
+   * 2. Triggers snake growth via eat() method
+   * 3. Respawns food at new random location avoiding snake body
+   *
+   * Called during each game update cycle before snake movement
    */
   private handleFoodConsumption(): void {
     if (this.food.isConsumedBy(this.snake)) {
@@ -439,6 +445,10 @@ export class Game {
     return this.snake;
   }
 
+  /**
+   * Get the food instance for testing and game logic access
+   * @returns The current food instance
+   */
   getFood(): Food {
     return this.food;
   }

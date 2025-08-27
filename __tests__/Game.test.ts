@@ -388,4 +388,133 @@ describe('Game', () => {
     expect(mockRenderer.setLineWidth).toHaveBeenCalledWith(2);
     expect(mockRenderer.strokeRect).toHaveBeenCalled();
   });
+
+  // Phase 6.1 Tests: End-to-End Integration Testing
+  it('completes full food lifecycle: spawn → consume → respawn', () => {
+    const game = new Game(false); // Don't autostart for testing
+    const snake = game.getSnake();
+    const food = (game as any).getFood();
+
+    // Phase 1: Initial spawn - verify food spawns at valid position avoiding snake
+    const initialPosition = food.getPosition();
+    expect(initialPosition.x).toBeGreaterThanOrEqual(0);
+    expect(initialPosition.x).toBeLessThan(20);
+    expect(initialPosition.y).toBeGreaterThanOrEqual(0);
+    expect(initialPosition.y).toBeLessThan(15);
+
+    // Verify food doesn't spawn on snake body
+    const snakeBody = snake.getBody();
+    const foodOnSnake = snakeBody.some(
+      (segment) =>
+        segment.x === initialPosition.x && segment.y === initialPosition.y
+    );
+    expect(foodOnSnake).toBe(false);
+
+    // Phase 2: Consumption - position food at snake head and trigger consumption
+    const snakeHead = snake.getHead();
+    const initialSnakeLength = snake.getBodyLength();
+    food.setPosition(snakeHead.x, snakeHead.y);
+
+    // Verify food is consumed
+    expect(food.isConsumedBy(snake)).toBe(true);
+
+    // Trigger game update to process consumption
+    (game as any).update(0.25);
+
+    // Phase 3: Post-consumption effects
+    // Snake should have grown
+    expect(snake.getBodyLength()).toBe(initialSnakeLength + 1);
+
+    // Food should have respawned at new position
+    const newPosition = food.getPosition();
+    expect(newPosition).not.toEqual(initialPosition);
+
+    // New position should be valid and avoid snake
+    expect(newPosition.x).toBeGreaterThanOrEqual(0);
+    expect(newPosition.x).toBeLessThan(20);
+    expect(newPosition.y).toBeGreaterThanOrEqual(0);
+    expect(newPosition.y).toBeLessThan(15);
+
+    // Verify game continues normally after consumption
+    expect((game as any).isGameOver()).toBe(false);
+  });
+
+  it('maintains consistent game state through multiple food consumptions', () => {
+    const game = new Game(false); // Don't autostart for testing
+    const snake = game.getSnake();
+    const food = (game as any).getFood();
+
+    const initialLength = snake.getBodyLength();
+    let consumptionCount = 0;
+    const maxConsumptions = 3;
+
+    // Simulate multiple food consumptions
+    for (let i = 0; i < maxConsumptions; i++) {
+      // Position food at snake head
+      const snakeHead = snake.getHead();
+      food.setPosition(snakeHead.x, snakeHead.y);
+
+      // Verify food can be consumed
+      expect(food.isConsumedBy(snake)).toBe(true);
+
+      // Process consumption
+      (game as any).update(0.25);
+      consumptionCount++;
+
+      // Verify snake growth after each consumption
+      expect(snake.getBodyLength()).toBe(initialLength + consumptionCount);
+
+      // Verify game remains in valid state
+      expect((game as any).isGameOver()).toBe(false);
+
+      // Verify food respawned to new position
+      const foodPosition = food.getPosition();
+      expect(foodPosition.x).toBeGreaterThanOrEqual(0);
+      expect(foodPosition.x).toBeLessThan(20);
+      expect(foodPosition.y).toBeGreaterThanOrEqual(0);
+      expect(foodPosition.y).toBeLessThan(15);
+    }
+
+    // Final verification: snake should have grown by exact number of consumptions
+    expect(snake.getBodyLength()).toBe(initialLength + maxConsumptions);
+    expect(consumptionCount).toBe(maxConsumptions);
+  });
+
+  it('integrates food system seamlessly with existing game mechanics', () => {
+    const game = new Game(false); // Don't autostart for testing
+    const snake = game.getSnake();
+    const food = (game as any).getFood();
+
+    // Test: Game continues normal movement with food present
+    const initialHead = snake.getHead();
+    (game as any).update(0.25); // Normal movement update
+
+    const newHead = snake.getHead();
+    expect(newHead.x).toBe(initialHead.x + 1); // Snake moved right
+
+    // Test: Direction changes work normally with food system
+    const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+    document.dispatchEvent(downEvent);
+    (game as any).update(0.25);
+    expect(snake.getDirection()).toBe('down');
+
+    // Test: Boundary collision detection still works with food system
+    // Move snake to near boundary
+    for (let i = 0; i < 15; i++) {
+      snake.move();
+    }
+
+    // Should detect collision at boundary
+    expect((game as any).checkCollision()).toBe(true);
+
+    // Test: Food system doesn't interfere with game over state
+    (game as any).update(0.25); // Should trigger game over
+    expect((game as any).isGameOver()).toBe(true);
+
+    // Verify food still exists and is valid even in game over state
+    const finalFoodPosition = food.getPosition();
+    expect(finalFoodPosition).toBeDefined();
+    expect(finalFoodPosition.x).toBeGreaterThanOrEqual(0);
+    expect(finalFoodPosition.x).toBeLessThan(20);
+  });
 });
