@@ -258,4 +258,78 @@ describe('Game', () => {
       20 // CELL_SIZE
     );
   });
+
+  // Phase 4.2 Tests: Snake-Food Interaction in Game Loop
+  it('snake grows when eating food', () => {
+    const game = new Game(false); // Don't autostart for testing
+    const snake = game.getSnake();
+    const food = (game as any).getFood();
+
+    // Get initial snake length
+    const initialLength = snake.getBodyLength();
+    expect(initialLength).toBe(3);
+
+    // Position food at snake's current head location to ensure immediate consumption
+    const snakeHead = snake.getHead();
+    food.setPosition(snakeHead.x, snakeHead.y);
+
+    // Verify food is consumed by snake at current position
+    expect(food.isConsumedBy(snake)).toBe(true);
+
+    // Trigger game update to move snake and process food collision
+    const deltaTime = 0.25; // More than movement interval
+    (game as any).update(deltaTime);
+
+    // Snake should have grown after eating food
+    expect(snake.getBodyLength()).toBe(initialLength + 1);
+  });
+
+  it('food respawns after being eaten', () => {
+    const game = new Game(false); // Don't autostart for testing
+    const snake = game.getSnake();
+    const food = (game as any).getFood();
+
+    // Get initial food position
+    const initialFoodPosition = food.getPosition();
+
+    // Position food at snake's current head location to force consumption
+    const snakeHead = snake.getHead();
+    food.setPosition(snakeHead.x, snakeHead.y);
+
+    // Trigger game update to process food consumption
+    const deltaTime = 0.25;
+    (game as any).update(deltaTime);
+
+    // Food should have respawned at a different position
+    const newFoodPosition = food.getPosition();
+    expect(newFoodPosition).not.toEqual(initialFoodPosition);
+
+    // New position should be within game boundaries
+    expect(newFoodPosition.x).toBeGreaterThanOrEqual(0);
+    expect(newFoodPosition.x).toBeLessThan(20);
+    expect(newFoodPosition.y).toBeGreaterThanOrEqual(0);
+    expect(newFoodPosition.y).toBeLessThan(15);
+  });
+
+  it('game continues running after food consumption', () => {
+    const game = new Game(false); // Don't autostart for testing
+    const snake = game.getSnake();
+    const food = (game as any).getFood();
+
+    // Position food at snake's next move location
+    const snakeHead = snake.getHead();
+    food.setPosition(snakeHead.x + 1, snakeHead.y);
+
+    // Trigger multiple game updates
+    const deltaTime = 0.25;
+    (game as any).update(deltaTime); // First update: consume food
+    (game as any).update(deltaTime); // Second update: continue normal movement
+
+    // Game should not be over after food consumption
+    expect((game as any).isGameOver()).toBe(false);
+
+    // Snake should continue moving normally
+    const finalHead = snake.getHead();
+    expect(finalHead.x).toBe(snakeHead.x + 2); // Moved 2 positions right
+  });
 });

@@ -158,8 +158,29 @@ export class Game {
         return;
       }
 
+      // Handle food consumption before snake moves
+      this.handleFoodConsumption();
+
       this.snake.move();
       this.lastMoveTime = 0;
+    }
+  }
+
+  /**
+   * Check and handle food consumption by snake
+   * This method processes the food-snake interaction when the snake head overlaps with food
+   */
+  private handleFoodConsumption(): void {
+    if (this.food.isConsumedBy(this.snake)) {
+      // Snake grows when eating food
+      this.snake.eat();
+
+      // Food respawns at new location avoiding snake
+      this.food.respawn(
+        Game.GAME_WIDTH,
+        Game.GAME_HEIGHT,
+        this.snake.getBody()
+      );
     }
   }
 
