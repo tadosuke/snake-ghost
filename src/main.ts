@@ -272,6 +272,21 @@ export class Game {
   }
 
   /**
+   * Convert grid coordinates to pixel coordinates
+   * @param gridPosition The grid position to convert
+   * @returns The pixel coordinates for rendering
+   */
+  private convertGridToPixel(gridPosition: { x: number; y: number }): {
+    x: number;
+    y: number;
+  } {
+    return {
+      x: gridPosition.x * Game.CELL_SIZE,
+      y: gridPosition.y * Game.CELL_SIZE,
+    };
+  }
+
+  /**
    * Check if snake is currently growing (has pending growth)
    * @returns true if snake will grow on next move
    */
@@ -370,10 +385,13 @@ export class Game {
       const color = index === 0 ? Game.SNAKE_HEAD_COLOR : Game.SNAKE_BODY_COLOR;
       renderer.setFillColor(color);
 
+      // Convert grid coordinates to pixel coordinates
+      const pixelPosition = this.convertGridToPixel(segment);
+
       // Draw segment as rectangle
       renderer.fillRect(
-        segment.x * Game.CELL_SIZE,
-        segment.y * Game.CELL_SIZE,
+        pixelPosition.x,
+        pixelPosition.y,
         Game.CELL_SIZE,
         Game.CELL_SIZE
       );
@@ -386,10 +404,11 @@ export class Game {
    */
   private renderFood(renderer: Renderer): void {
     const position = this.food.getPosition();
+    const pixelPosition = this.convertGridToPixel(position);
 
     // Calculate center position for circular food rendering
-    const centerX = position.x * Game.CELL_SIZE + Game.CELL_SIZE / 2;
-    const centerY = position.y * Game.CELL_SIZE + Game.CELL_SIZE / 2;
+    const centerX = pixelPosition.x + Game.CELL_SIZE / 2;
+    const centerY = pixelPosition.y + Game.CELL_SIZE / 2;
     const radius = Game.CELL_SIZE / 2 - 2; // Slightly smaller than cell for visual appeal
 
     // Set food fill color and render as circle for visual distinction from snake
@@ -400,8 +419,8 @@ export class Game {
     renderer.setStrokeColor(Game.FOOD_STROKE_COLOR);
     renderer.setLineWidth(2);
     renderer.strokeRect(
-      position.x * Game.CELL_SIZE,
-      position.y * Game.CELL_SIZE,
+      pixelPosition.x,
+      pixelPosition.y,
       Game.CELL_SIZE,
       Game.CELL_SIZE
     );
