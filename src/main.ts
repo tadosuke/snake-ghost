@@ -234,6 +234,20 @@ export class Game {
       return true;
     }
 
+    // Check self collision using extracted method
+    return this.checkSelfCollisionAtPosition(nextHeadPosition);
+  }
+
+  /**
+   * Check if a position would cause self collision with the snake body
+   * Accounts for tail movement when snake is not growing
+   * @param nextHeadPosition The position to check for self collision
+   * @returns true if position would collide with snake body, false otherwise
+   */
+  private checkSelfCollisionAtPosition(nextHeadPosition: {
+    x: number;
+    y: number;
+  }): boolean {
     // Check self collision - but account for tail movement
     // The tail will move unless the snake is growing, so we need to check
     // if the next position would collide with body segments (excluding the tail unless growing)
