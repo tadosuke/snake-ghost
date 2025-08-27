@@ -16,6 +16,7 @@ export class Game {
   private static readonly SNAKE_HEAD_COLOR = '#4CAF50';
   private static readonly SNAKE_BODY_COLOR = '#8BC34A';
   private static readonly FOOD_COLOR = '#FF4444';
+  private static readonly FOOD_STROKE_COLOR = '#CC0000';
   private static readonly BACKGROUND_COLOR = '#242424';
   private static readonly SNAKE_MOVE_INTERVAL = 200; // Move every 200ms
 
@@ -372,11 +373,19 @@ export class Game {
   private renderFood(renderer: Renderer): void {
     const position = this.food.getPosition();
 
-    // Set food color using constant
-    renderer.setFillColor(Game.FOOD_COLOR);
+    // Calculate center position for circular food rendering
+    const centerX = position.x * Game.CELL_SIZE + Game.CELL_SIZE / 2;
+    const centerY = position.y * Game.CELL_SIZE + Game.CELL_SIZE / 2;
+    const radius = Game.CELL_SIZE / 2 - 2; // Slightly smaller than cell for visual appeal
 
-    // Render food as a rectangle at its position
-    renderer.fillRect(
+    // Set food fill color and render as circle for visual distinction from snake
+    renderer.setFillColor(Game.FOOD_COLOR);
+    renderer.fillCircle(centerX, centerY, radius);
+
+    // Add subtle stroke outline for better visibility and consistency
+    renderer.setStrokeColor(Game.FOOD_STROKE_COLOR);
+    renderer.setLineWidth(2);
+    renderer.strokeRect(
       position.x * Game.CELL_SIZE,
       position.y * Game.CELL_SIZE,
       Game.CELL_SIZE,

@@ -38,8 +38,8 @@ describe('Game', () => {
     }).not.toThrow();
 
     // Verify that snake segments are drawn (this will fail initially)
-    // Each snake segment should result in a fillRect call + 1 food fillRect call
-    expect(mockRenderer.fillRect).toHaveBeenCalledTimes(4); // Head + 2 body segments + food
+    // Each snake segment should result in a fillRect call (food now uses fillCircle)
+    expect(mockRenderer.fillRect).toHaveBeenCalledTimes(3); // Head + 2 body segments only
 
     // Verify head and body are visually distinct (different colors)
     expect(mockRenderer.setFillColor).toHaveBeenCalledWith(
@@ -246,16 +246,15 @@ describe('Game', () => {
       (game as any).render(mockRenderer);
     }).not.toThrow();
 
-    // Verify that food is rendered - should result in a fillRect call for food
-    // Food should be rendered as a rectangle at its position
+    // Verify that food is rendered - should result in a fillCircle call for food
+    // Food should be rendered as a circle for visual distinction from snake
     const food = (game as any).getFood();
     const position = food.getPosition();
 
-    expect(mockRenderer.fillRect).toHaveBeenCalledWith(
-      position.x * 20, // position * CELL_SIZE
-      position.y * 20,
-      20, // CELL_SIZE
-      20 // CELL_SIZE
+    expect(mockRenderer.fillCircle).toHaveBeenCalledWith(
+      position.x * 20 + 10, // center X (position * CELL_SIZE + CELL_SIZE/2)
+      position.y * 20 + 10, // center Y (position * CELL_SIZE + CELL_SIZE/2)
+      8 // radius
     );
   });
 
@@ -331,5 +330,62 @@ describe('Game', () => {
     // Snake should continue moving normally
     const finalHead = snake.getHead();
     expect(finalHead.x).toBe(snakeHead.x + 2); // Moved 2 positions right
+  });
+
+  // Phase 5.1 Tests: Enhanced Food Visualization
+  it('food renders with visual distinction from snake', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+
+    // Mock renderer to capture rendering calls
+    const mockRenderer = {
+      clear: vi.fn(),
+      setFillColor: vi.fn(),
+      setStrokeColor: vi.fn(),
+      setLineWidth: vi.fn(),
+      fillRect: vi.fn(),
+      strokeRect: vi.fn(),
+      fillCircle: vi.fn(),
+      drawText: vi.fn(),
+    };
+
+    // Render and capture calls
+    (game as any).render(mockRenderer);
+
+    // Verify food uses circle rendering for visual distinction from snake rectangles
+    const food = (game as any).getFood();
+    const position = food.getPosition();
+
+    expect(mockRenderer.fillCircle).toHaveBeenCalledWith(
+      position.x * 20 + 10, // center X (position * CELL_SIZE + CELL_SIZE/2)
+      position.y * 20 + 10, // center Y (position * CELL_SIZE + CELL_SIZE/2)
+      8 // radius (smaller than cell size for visual appeal)
+    );
+  });
+
+  it('food has consistent visual styling with game theme', () => {
+    const game = new Game(false); // Don't autostart to avoid DOM dependency
+
+    // Mock renderer to capture styling calls
+    const mockRenderer = {
+      clear: vi.fn(),
+      setFillColor: vi.fn(),
+      setStrokeColor: vi.fn(),
+      setLineWidth: vi.fn(),
+      fillRect: vi.fn(),
+      strokeRect: vi.fn(),
+      fillCircle: vi.fn(),
+      drawText: vi.fn(),
+    };
+
+    // Render food
+    (game as any).render(mockRenderer);
+
+    // Verify food color matches expected theme color
+    expect(mockRenderer.setFillColor).toHaveBeenCalledWith('#FF4444');
+
+    // Verify food also has stroke for better visibility
+    expect(mockRenderer.setStrokeColor).toHaveBeenCalledWith('#CC0000');
+    expect(mockRenderer.setLineWidth).toHaveBeenCalledWith(2);
+    expect(mockRenderer.strokeRect).toHaveBeenCalled();
   });
 });
