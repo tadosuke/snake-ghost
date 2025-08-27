@@ -229,13 +229,8 @@ export class Game {
       y: head.y + directionVector.y,
     };
 
-    // Check boundary collision
-    if (
-      nextHeadPosition.x < 0 ||
-      nextHeadPosition.x >= Game.GAME_WIDTH ||
-      nextHeadPosition.y < 0 ||
-      nextHeadPosition.y >= Game.GAME_HEIGHT
-    ) {
+    // Check boundary collision using extracted method
+    if (this.checkBoundaryCollision(nextHeadPosition)) {
       return true;
     }
 
@@ -243,7 +238,6 @@ export class Game {
     // The tail will move unless the snake is growing, so we need to check
     // if the next position would collide with body segments (excluding the tail unless growing)
     const body = this.snake.getBody();
-    const snake = this.snake;
 
     // Check collision with body segments, but exclude tail position if snake isn't growing
     for (let i = 1; i < body.length; i++) {
@@ -261,6 +255,20 @@ export class Game {
     }
 
     return false;
+  }
+
+  /**
+   * Check if a position would cause boundary collision
+   * @param position The position to check
+   * @returns true if position is outside game boundaries, false otherwise
+   */
+  private checkBoundaryCollision(position: { x: number; y: number }): boolean {
+    return (
+      position.x < 0 ||
+      position.x >= Game.GAME_WIDTH ||
+      position.y < 0 ||
+      position.y >= Game.GAME_HEIGHT
+    );
   }
 
   /**
